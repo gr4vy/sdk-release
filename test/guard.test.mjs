@@ -38,6 +38,17 @@ test('a push by anyone but Speakeasy goes to a human', () => {
   assert.match(reasons[0], /latest push was by mallory/);
 });
 
+test('typescript: only gr4vy-sdk-generate may open and push a Speakeasy PR', () => {
+  const input = load('typescript');
+  assert.deepEqual(input.config.pushActors, ['gr4vy-sdk-generate[bot]']);
+  for (const login of ['speakeasy-github[bot]', 'github-actions[bot]']) {
+    const { reasons } = evaluate({ ...input, run: { ...input.run, actor: { login } } });
+    assert.ok(reasons[0].startsWith(`latest push was by ${login}`));
+  }
+  const { reasons } = evaluate({ ...input, pr: { ...input.pr, user: { login: 'github-actions[bot]' } } });
+  assert.deepEqual(reasons, ['PR opened by github-actions[bot], not gr4vy-sdk-generate[bot]']);
+});
+
 test('a CI result for an older commit is not trusted', () => {
   const input = load('typescript');
   const { reasons } = evaluate({ ...input, run: { ...input.run, head_sha: 'deadbeef' } });
