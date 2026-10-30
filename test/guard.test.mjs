@@ -11,7 +11,7 @@ function load(sdk) {
   const fx = JSON.parse(readFileSync(new URL(`fixtures/${sdk}.json`, import.meta.url)));
   const config = JSON.parse(readFileSync(new URL(`../config/${sdk}.json`, import.meta.url)));
   const pr = { ...fx.pr, state: 'open' };
-  const run = { head_sha: pr.head.sha, event: 'pull_request', conclusion: 'success', actor: { login: 'speakeasy-github[bot]' } };
+  const run = { head_sha: pr.head.sha, event: 'pull_request', conclusion: 'success', actor: { login: config.pushActors[0] } };
   return { pr, run, commits: fx.commits, files: fx.files, genignore: fx.genignore, config };
 }
 
