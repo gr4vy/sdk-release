@@ -1,0 +1,40 @@
+{
+  "baseBranch": "main",
+  "prAuthor": "github-actions[bot]",
+  "branchPrefix": "speakeasy-sdk-regen-",
+  "pushActors": [
+    "speakeasy-github[bot]"
+  ],
+  "commitAuthors": [
+    "speakeasybot",
+    "speakeasy-github[bot]"
+  ],
+  "allowed": [
+    "src/main/**",
+    "docs/**",
+    "README.md",
+    "RELEASES.md",
+    "USAGE.md",
+    ".speakeasy/gen.lock",
+    ".speakeasy/workflow.lock"
+  ],
+  "versionOnly": [
+    ".speakeasy/gen.yaml",
+    "gradle.properties"
+  ],
+  "blocked": [
+    ".github/**",
+    ".speakeasy/workflow.yaml",
+    ".speakeasy/scripts/**",
+    "scripts/**",
+    ".genignore",
+    ".gitattributes",
+    "src/main/java/com/gr4vy/sdk/hooks/**",
+    "src/main/java/com/gr4vy/sdk/Webhooks.java",
+    "src/test/**",
+    "gradle/**",
+    "gradlew",
+    "gradlew.bat",
+    "*.gradle"
+  ]
+}

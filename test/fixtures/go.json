@@ -1,0 +1,84 @@
+{
+  "pr": {
+    "number": 334,
+    "state": "closed",
+    "draft": false,
+    "commits": 2,
+    "changed_files": 5,
+    "title": "chore: 🐝 Update SDK - Generate SDK 1.14.9",
+    "user": {
+      "login": "github-actions[bot]"
+    },
+    "labels": [],
+    "head": {
+      "ref": "speakeasy-sdk-regen-1791457518",
+      "sha": "ea44145bdeb81f8ee3f74ff2a5472ff573d86a0c",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-go"
+      }
+    },
+    "base": {
+      "ref": "main",
+      "sha": "9c63eed3d8426893b4af5503ffcd00ef7c0cc19e",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-go"
+      }
+    }
+  },
+  "commits": [
+    {
+      "sha": "b697cd132dcf70471852a8d2605c731e189f1d79",
+      "author": {
+        "login": "speakeasybot"
+      },
+      "committer": {
+        "login": "speakeasybot"
+      }
+    },
+    {
+      "sha": "ea44145bdeb81f8ee3f74ff2a5472ff573d86a0c",
+      "author": {
+        "login": "speakeasy-github[bot]"
+      },
+      "committer": {
+        "login": "speakeasybot"
+      }
+    }
+  ],
+  "files": [
+    {
+      "filename": ".speakeasy/gen.lock",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -1,18 +1,18 @@\n lockVersion: 2.0.0\n id: 287b5a97-80f3-4c24-a960-9e86d8d5e3db\n management:\n-  docChecksum: e76eb72fe2d2951a193dd0d8bd0e5202\n+  docChecksum: 04e00974458002767f46f1dcb6901f61\n   docVersion: 1.0.0\n   speakeasyVersion: 1.801.0\n   generationVersion: 2.946.0\n-  releaseVersion: 1.14.8\n-  configChecksum: d8bda7e691fd399ec4182e33a75dd86b\n+  releaseVersion: 1.14.9\n+  configChecksum: bbcc4a8807a0a43546902a0828ecc28a\n   repoURL: https://github.com/gr4vy/gr4vy-go.git\n   installationURL: https://github.com/gr4vy/gr4vy-go\n persistentEdits:\n-  generation_id: b70d3013-3895-4117-b26b-5567bf2f75d4\n-  pristine_commit_hash: d12e35e375a61a2352fb30897c681e329cbcbc3a\n-  pristine_tree_hash: 8068d69976d695b6e0da9bc268af5f8286a6c430\n+  generation_id: 364e7e6f-77e3-49dd-a5f8-06565b708f8b\n+  pristine_commit_hash: 59eeb143e492d8f4a82c79a3d65a035b3a0082ab\n+  pristine_tree_hash: 5f6c15c0a771a46c046be6b4a8e7f503becd83ad\n features:\n   go:\n     additionalDependencies: 0.1.0\n@@ -2983,8 +2983,8 @@ trackedFiles:\n     pristine_git_object: fc96b9d27553c3711eb459c5634415331316005e\n   gr4vy.go:\n     id: 8c61535dff53\n-    last_write_checksum: sha1:35989214fc182942cae0bc90e771571eca83fd54\n-    pristine_git_object: ff5f0f540e30567eaa1aab2ead477e9ca02457c9\n+    last_write_checksum: sha1:9d216c0ee5aef7df243593bcf49104dea6db1c7a\n+    pristine_git_object: 68b00ce51316934de0241196e2a8110344cf3fa1\n   internal/config/sdkconfiguration.go:\n     id: 33b8bfac5265\n     last_write_checksum: sha1:49a61622a2ffe8cb3c0d6caa45441a496d9eb3fc\n@@ -9351,9 +9351,6 @@ examples:\n           application/json: {\"type\": \"error\", \"code\": \"gateway_timeout\", \"status\": 504, \"message\": \"Request could not be processed\"}\n examplesVersion: 1.0.2\n generatedTests: {}\n-releaseNotes: |\n-  ## Go SDK Changes:\n-  * `Gr4vy.Transactions.Events.List()`:  `response.Items[].Name.Enum(refundIngested)` **Added**\n generatedFiles:\n   - .devcontainer/README.md\n   - .devcontainer/devcontainer.json"
+    },
+    {
+      "filename": ".speakeasy/gen.yaml",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -33,7 +33,7 @@ generation:\n     generateNewTests: false\n     skipResponseBodyAssertions: false\n go:\n-  version: 1.14.8\n+  version: 1.14.9\n   additionalDependencies:\n     github.com/golang-jwt/jwt/v5: v5.2.2\n     github.com/google/uuid: v1.6.0"
+    },
+    {
+      "filename": ".speakeasy/workflow.lock",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -9,19 +9,19 @@ sources:\n             - 1.0.0\n     openapi:\n         sourceNamespace: openapi\n-        sourceRevisionDigest: sha256:e11903a2cbefb02fe7c8b2e4d3773e30d748b9016efbec3bcde9bce8416ca378\n-        sourceBlobDigest: sha256:11c314b41174084707b57852491fa2456fe8a447bd5fef271858595a4cc65b28\n+        sourceRevisionDigest: sha256:c100f3a4286beed7a9976daa6b4231210818ee20f3599fb94e2adacdffce8e64\n+        sourceBlobDigest: sha256:e1ea34a11e0256db0a18280394d7a9ab09bb1de05987cd4fd2619af8cc2da372\n         tags:\n             - latest\n             - 1.0.0\n targets:\n     go:\n         source: openapi\n         sourceNamespace: openapi\n-        sourceRevisionDigest: sha256:e11903a2cbefb02fe7c8b2e4d3773e30d748b9016efbec3bcde9bce8416ca378\n-        sourceBlobDigest: sha256:11c314b41174084707b57852491fa2456fe8a447bd5fef271858595a4cc65b28\n+        sourceRevisionDigest: sha256:c100f3a4286beed7a9976daa6b4231210818ee20f3599fb94e2adacdffce8e64\n+        sourceBlobDigest: sha256:e1ea34a11e0256db0a18280394d7a9ab09bb1de05987cd4fd2619af8cc2da372\n         codeSamplesNamespace: openapi-go-code-samples\n-        codeSamplesRevisionDigest: sha256:a55e812f53782a04165ef29e999642909675afa28e34c5797f2bcc6cf5ba6dd2\n+        codeSamplesRevisionDigest: sha256:c732a272151b3ec8c669e30a986c8e3626bc8c70ae26e865a6502c1495aa607f\n workflow:\n     workflowVersion: 1.0.0\n     speakeasyVersion: latest"
+    },
+    {
+      "filename": "RELEASES.md",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -2598,4 +2598,14 @@ Based on:\n ### Generated\n - [go v1.14.8] .\n ### Releases\n-- [Go v1.14.8] https://github.com/gr4vy/gr4vy-go/releases/tag/v1.14.8 - .\n\\ No newline at end of file\n+- [Go v1.14.8] https://github.com/gr4vy/gr4vy-go/releases/tag/v1.14.8 - .\n+\n+## 2026-10-08 11:04:55\n+### Changes\n+Based on:\n+- OpenAPI Doc  \n+- Speakeasy CLI 1.801.0 (2.946.0) https://github.com/speakeasy-api/speakeasy\n+### Generated\n+- [go v1.14.9] .\n+### Releases\n+- [Go v1.14.9] https://github.com/gr4vy/gr4vy-go/releases/tag/v1.14.9 - .\n\\ No newline at end of file"
+    },
+    {
+      "filename": "gr4vy.go",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -175,10 +175,10 @@ func WithTimeout(timeout time.Duration) SDKOption {\n // New creates a new instance of the SDK with the provided options\n func New(opts ...SDKOption) *Gr4vy {\n \tsdk := &Gr4vy{\n-\t\tSDKVersion: \"1.14.8\",\n+\t\tSDKVersion: \"1.14.9\",\n \t\tsdkConfiguration: config.SDKConfiguration{\n-\t\t\tUserAgent:         \"speakeasy-sdk/go 1.14.8 2.946.0 1.0.0 github.com/gr4vy/gr4vy-go\",\n-\t\t\tSDKVersion:        \"1.14.8\",\n+\t\t\tUserAgent:         \"speakeasy-sdk/go 1.14.9 2.946.0 1.0.0 github.com/gr4vy/gr4vy-go\",\n+\t\t\tSDKVersion:        \"1.14.9\",\n \t\t\tGenVersion:        \"2.946.0\",\n \t\t\tOpenAPIDocVersion: \"1.0.0\",\n \t\t\tGlobals:           globals.Globals{},"
+    }
+  ],
+  "genignore": [
+    "auth.go",
+    "auth_test.go"
+  ]
+}

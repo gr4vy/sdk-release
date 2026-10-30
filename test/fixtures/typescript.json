@@ -1,0 +1,109 @@
+{
+  "pr": {
+    "number": 367,
+    "state": "closed",
+    "draft": false,
+    "commits": 2,
+    "changed_files": 9,
+    "title": "chore: 🐝 Update SDK - Generate SDK TYPESCRIPT 2.4.37",
+    "user": {
+      "login": "github-actions[bot]"
+    },
+    "labels": [],
+    "head": {
+      "ref": "speakeasy-sdk-regen-1791457514",
+      "sha": "e62561858b2f3c28820c7f3a8ea79b05d93f433f",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-typescript"
+      }
+    },
+    "base": {
+      "ref": "main",
+      "sha": "5fa42e9e94868365a91786c8fd9448b9860b7a51",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-typescript"
+      }
+    }
+  },
+  "commits": [
+    {
+      "sha": "8e3dac3752f5cea220c6f23d40d32ad798327057",
+      "author": {
+        "login": "speakeasybot"
+      },
+      "committer": {
+        "login": "speakeasybot"
+      }
+    },
+    {
+      "sha": "e62561858b2f3c28820c7f3a8ea79b05d93f433f",
+      "author": {
+        "login": "speakeasy-github[bot]"
+      },
+      "committer": {
+        "login": "speakeasybot"
+      }
+    }
+  ],
+  "files": [
+    {
+      "filename": ".speakeasy/gen.lock",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -1,19 +1,19 @@\n lockVersion: 2.0.0\n id: 51cb4b7f-adbc-475c-a495-d8672b13ce8e\n management:\n-  docChecksum: 71a468fd1fb2c390d488dbf23e5901de\n+  docChecksum: 74e7f9943eb7fc497c33f4412f22f900\n   docVersion: 1.0.0\n   speakeasyVersion: 1.801.0\n   generationVersion: 2.946.0\n-  releaseVersion: 2.4.36\n-  configChecksum: 01a69035aa932065ee8e74e3bc3e7988\n+  releaseVersion: 2.4.37\n+  configChecksum: 541ea1e190d95b2d85fb4bb17212a011\n   repoURL: https://github.com/gr4vy/gr4vy-typescript.git\n   installationURL: https://github.com/gr4vy/gr4vy-typescript\n   published: true\n persistentEdits:\n-  generation_id: 139707c4-7741-4eb0-b144-e50d74c3a918\n-  pristine_commit_hash: e522a7e54cf89363bfb39699d15b6105cdec5884\n-  pristine_tree_hash: d65b363e32e59adf16bc45e5aadbd3256905b1f1\n+  generation_id: fd9449b7-0030-4179-975e-b397813b4091\n+  pristine_commit_hash: ca56f7f54cab214490e9f32fbe4db48bd5cfc029\n+  pristine_tree_hash: dfc714d8e422709c267abbae879b6f717adaf98c\n features:\n   typescript:\n     additionalDependencies: 0.1.0\n@@ -2924,12 +2924,12 @@ trackedFiles:\n     pristine_git_object: 6e10529a93fb4185b404d0e45a9ce98b7b0ae408\n   jsr.json:\n     id: 7f6ab7767282\n-    last_write_checksum: sha1:9a48d00b1e6180057a2f709ec4e4445d83371c00\n-    pristine_git_object: de0bbfca54e882c6e8c84ab701232ac2033a4495\n+    last_write_checksum: sha1:ab3da93c723d8f6361bf7823c6adad289a6fdb93\n+    pristine_git_object: ff3cffbe35889b165b5183d7b0cd7566d535a39c\n   package.json:\n     id: 7030d0b2f71b\n-    last_write_checksum: sha1:6b40de831db95a7e0bb8cb3074f6a5ce988040d9\n-    pristine_git_object: 5008cecd6fb9f80bc082094d0e10041eb4abcc4d\n+    last_write_checksum: sha1:a688577c74257706762b4e989586da4b0894e435\n+    pristine_git_object: e9c974d5e2bf0aa1804f3d7958e9953f1bff1982\n   src/core.ts:\n     id: f431fdbcd144\n     last_write_checksum: sha1:45271ffd8867c65f66117c59ce98a8b3d8045841\n@@ -3432,8 +3432,8 @@ trackedFiles:\n     pristine_git_object: 0aebd8b0a4867e35cb3348fc52921c3c0b4725b7\n   src/lib/config.ts:\n     id: 320761608fb3\n-    last_write_checksum: sha1:8689df54bf0e7dfda9e36ded5ea534ec5f08176e\n-    pristine_git_object: 2b3c76e78f229a34838c91da6898d517a5f455c1\n+    last_write_checksum: sha1:5c73792833cee2e892614acfea0d07d407e751ac\n+    pristine_git_object: e3e2831a1fee154dc872af98b507f16a87170153\n   src/lib/encodings.ts:\n     id: 3bd8ead98afd\n     last_write_checksum: sha1:a257d6f6108693db2197617c579400bc8f0da914\n@@ -9937,9 +9937,6 @@ examples:\n           application/json: {\"type\": \"error\", \"code\": \"gateway_timeout\", \"status\": 504, \"message\": \"Request could not be processed\"}\n examplesVersion: 1.0.2\n generatedTests: {}\n-releaseNotes: |\n-  ## Typescript SDK Changes:\n-  * `gr4vy.transactions.events.list()`:  `response.items[].name.enum(refundIngested)` **Added**\n generatedFiles:\n   - .gitattributes\n   - .npmignore"
+    },
+    {
+      "filename": ".speakeasy/gen.yaml",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -29,7 +29,7 @@ generation:\n     generateNewTests: false\n     skipResponseBodyAssertions: false\n typescript:\n-  version: 2.4.36\n+  version: 2.4.37\n   acceptHeaderEnum: true\n   additionalDependencies:\n     dependencies:"
+    },
+    {
+      "filename": ".speakeasy/workflow.lock",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -2,8 +2,8 @@ speakeasyVersion: 1.801.0\n sources:\n     openapi:\n         sourceNamespace: openapi\n-        sourceRevisionDigest: sha256:bb122035fca0ffa28323087f1fb5cd086894f80b3e078dd58f47504a982ac2dd\n-        sourceBlobDigest: sha256:14ca5fa6ca477fa88ca030feb0bcc11a853ec493dfc84720a791d38c4c4d769a\n+        sourceRevisionDigest: sha256:465ffc9416b1595601455a4fa8524944ea636f77627333746830f8aca11ac1ae\n+        sourceBlobDigest: sha256:cc950a1c77725a0b14ff591b1a6bdfe0d8554cf453f81524e535ac74db79bfda\n         tags:\n             - latest\n             - 1.0.0\n@@ -16,10 +16,10 @@ targets:\n     typescript:\n         source: openapi\n         sourceNamespace: openapi\n-        sourceRevisionDigest: sha256:bb122035fca0ffa28323087f1fb5cd086894f80b3e078dd58f47504a982ac2dd\n-        sourceBlobDigest: sha256:14ca5fa6ca477fa88ca030feb0bcc11a853ec493dfc84720a791d38c4c4d769a\n+        sourceRevisionDigest: sha256:465ffc9416b1595601455a4fa8524944ea636f77627333746830f8aca11ac1ae\n+        sourceBlobDigest: sha256:cc950a1c77725a0b14ff591b1a6bdfe0d8554cf453f81524e535ac74db79bfda\n         codeSamplesNamespace: openapi-typescript-code-samples\n-        codeSamplesRevisionDigest: sha256:93994ea4dac8efbb0543786122fca843c88e7ffdfc523e63e5cd3fa320a4a4d7\n+        codeSamplesRevisionDigest: sha256:3fce1f922323d0f18089668529f261f158c42d664606a6d97a95c651f4ab347e\n workflow:\n     workflowVersion: 1.0.0\n     speakeasyVersion: latest"
+    },
+    {
+      "filename": "RELEASES.md",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -2984,4 +2984,14 @@ Based on:\n ### Generated\n - [typescript v2.4.36] .\n ### Releases\n-- [NPM v2.4.36] https://www.npmjs.com/package/@gr4vy/sdk/v/2.4.36 - .\n\\ No newline at end of file\n+- [NPM v2.4.36] https://www.npmjs.com/package/@gr4vy/sdk/v/2.4.36 - .\n+\n+## 2026-10-08 11:04:50\n+### Changes\n+Based on:\n+- OpenAPI Doc  \n+- Speakeasy CLI 1.801.0 (2.946.0) https://github.com/speakeasy-api/speakeasy\n+### Generated\n+- [typescript v2.4.37] .\n+### Releases\n+- [NPM v2.4.37] https://www.npmjs.com/package/@gr4vy/sdk/v/2.4.37 - .\n\\ No newline at end of file"
+    },
+    {
+      "filename": "examples/package-lock.json",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -18,7 +18,7 @@\n     },\n     \"..\": {\n       \"name\": \"@gr4vy/sdk\",\n-      \"version\": \"2.4.36\",\n+      \"version\": \"2.4.37\",\n       \"dependencies\": {\n         \"jsonwebtoken\": \"^9.0.3\",\n         \"snakecase-keys\": \"^8.1.0\","
+    },
+    {
+      "filename": "jsr.json",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -2,7 +2,7 @@\n \n {\n   \"name\": \"@gr4vy/sdk\",\n-  \"version\": \"2.4.36\",\n+  \"version\": \"2.4.37\",\n   \"exports\": {\n     \".\": \"./src/index.ts\",    \n     \"./models/errors\": \"./src/models/errors/index.ts\",    "
+    },
+    {
+      "filename": "package-lock.json",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -1,12 +1,12 @@\n {\n   \"name\": \"@gr4vy/sdk\",\n-  \"version\": \"2.4.36\",\n+  \"version\": \"2.4.37\",\n   \"lockfileVersion\": 3,\n   \"requires\": true,\n   \"packages\": {\n     \"\": {\n       \"name\": \"@gr4vy/sdk\",\n-      \"version\": \"2.4.36\",\n+      \"version\": \"2.4.37\",\n       \"dependencies\": {\n         \"jsonwebtoken\": \"^9.0.3\",\n         \"snakecase-keys\": \"^8.1.0\","
+    },
+    {
+      "filename": "package.json",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -1,6 +1,6 @@\n {\n   \"name\": \"@gr4vy/sdk\",\n-  \"version\": \"2.4.36\",\n+  \"version\": \"2.4.37\",\n   \"author\": \"Gr4vy\",\n   \"main\": \"./index.js\",\n   \"sideEffects\": false,"
+    },
+    {
+      "filename": "src/lib/config.ts",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -77,7 +77,7 @@ export function serverURLFromOptions(options: SDKOptions): URL | null {\n export const SDK_METADATA = {\n   language: \"typescript\",\n   openapiDocVersion: \"1.0.0\",\n-  sdkVersion: \"2.4.36\",\n+  sdkVersion: \"2.4.37\",\n   genVersion: \"2.946.0\",\n-  userAgent: \"speakeasy-sdk/typescript 2.4.36 2.946.0 1.0.0 @gr4vy/sdk\",\n+  userAgent: \"speakeasy-sdk/typescript 2.4.37 2.946.0 1.0.0 @gr4vy/sdk\",\n } as const;"
+    }
+  ],
+  "genignore": [
+    "src/index.ts",
+    "src/lib/auth.ts",
+    "tests/auth.test.js"
+  ]
+}

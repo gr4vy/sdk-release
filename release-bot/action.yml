@@ -1,0 +1,46 @@
+name: SDK release bot
+description: Approves and merges a green Speakeasy PR that passes the path guards, or labels it needs-human.
+inputs:
+  sdk:
+    description: Which config/<sdk>.json to apply.
+    required: true
+  run-id:
+    description: The CI workflow run that just completed.
+    required: true
+  client-id:
+    description: Release bot GitHub App client ID.
+    required: true
+  private-key:
+    description: Release bot GitHub App private key.
+    required: true
+outputs:
+  verdict:
+    description: merged or human (empty when the PR was not a Speakeasy PR).
+    value: ${{ steps.bot.outputs.verdict }}
+  pr:
+    value: ${{ steps.bot.outputs.pr }}
+  notify:
+    description: true the first time a PR is flagged needs-human.
+    value: ${{ steps.bot.outputs.notify }}
+runs:
+  using: composite
+  steps:
+    - id: token
+      uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+      with:
+        client-id: ${{ inputs.client-id }}
+        private-key: ${{ inputs.private-key }}
+        repositories: ${{ github.event.repository.name }}
+        permission-actions: read
+        permission-contents: write
+        permission-issues: write
+        permission-pull-requests: write
+
+    - id: bot
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ steps.token.outputs.token }}
+        RUN_ID: ${{ inputs.run-id }}
+        SDK_CONFIG: ${{ github.action_path }}/../config/${{ inputs.sdk }}.json
+        BOT: ${{ github.action_path }}/../guard/release-bot.mjs
+      run: node "$BOT"

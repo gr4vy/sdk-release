@@ -1,0 +1,105 @@
+{
+  "pr": {
+    "number": 298,
+    "state": "closed",
+    "draft": false,
+    "commits": 3,
+    "changed_files": 7,
+    "title": "chore: 🐝 Update SDK - Generate SDK 2.11.3",
+    "user": {
+      "login": "github-actions[bot]"
+    },
+    "labels": [],
+    "head": {
+      "ref": "speakeasy-sdk-regen-1791457513",
+      "sha": "32ec76af3a47d7d228ee4ae54c63ad894a7fb685",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-csharp"
+      }
+    },
+    "base": {
+      "ref": "main",
+      "sha": "bd3cc28a994ae4a6ab083db3ea09a6be31a9416f",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-csharp"
+      }
+    }
+  },
+  "commits": [
+    {
+      "sha": "d2985392404538d6e36e009d3e558565825c6409",
+      "author": {
+        "login": "speakeasybot"
+      },
+      "committer": {
+        "login": "speakeasybot"
+      }
+    },
+    {
+      "sha": "909561e2e1358fea6e1bc847cd89c85e4336eb6e",
+      "author": {
+        "login": "speakeasy-github[bot]"
+      },
+      "committer": {
+        "login": "speakeasybot"
+      }
+    },
+    {
+      "sha": "32ec76af3a47d7d228ee4ae54c63ad894a7fb685",
+      "author": {
+        "login": "github-actions[bot]"
+      },
+      "committer": {
+        "login": "github-actions[bot]"
+      }
+    }
+  ],
+  "files": [
+    {
+      "filename": ".speakeasy/gen.lock",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -1,19 +1,19 @@\n lockVersion: 2.0.0\n id: dff72156-4bdf-460f-b5b3-0759c9c474fb\n management:\n-  docChecksum: 23e76ed8cc967f1ff43630ec3d3c39dd\n+  docChecksum: 175ceaa8b4474d9f1cee8fa45a0c22d3\n   docVersion: 1.0.0\n   speakeasyVersion: 1.801.0\n   generationVersion: 2.946.0\n-  releaseVersion: 2.11.2\n-  configChecksum: daa020bab8caad5e4eb210ef1c780368\n+  releaseVersion: 2.11.3\n+  configChecksum: a42bf656d7f871698862e5cd922d4ec0\n   repoURL: https://github.com/gr4vy/gr4vy-csharp.git\n   installationURL: https://github.com/gr4vy/gr4vy-csharp\n   published: true\n persistentEdits:\n-  generation_id: 192bf823-ac60-4fbf-b876-3ffacf656ef9\n-  pristine_commit_hash: ae2d4298e62f1ff4a561a412c42a4dea7f41a92c\n-  pristine_tree_hash: e5c10f8ae021f3c0df1f67f4ca101dab01e7ce8e\n+  generation_id: 6aff4df2-057e-45ac-b129-525d2f5c075f\n+  pristine_commit_hash: b4f93821a374ab73759f36224d77ea56ac54a0cb\n+  pristine_tree_hash: 4b4207d8f0e7be5a8d0c78ade5a57fa9e767ae77\n features:\n   csharp:\n     additionalDependencies: 0.1.0\n@@ -2542,8 +2542,8 @@ trackedFiles:\n     pristine_git_object: 47e4aae45de7f5d7a69eb67926a50ce82051de38\n   src/Gr4vy/Gr4vy.csproj:\n     id: 76fb0924ceb4\n-    last_write_checksum: sha1:59feb8cd98ce482712ee54ecd494bb3d56726f24\n-    pristine_git_object: 7792580a5dc759a10da1915a48e23ad95863db66\n+    last_write_checksum: sha1:a0a0676537518ee0b6748c3a0835290fbf3c1314\n+    pristine_git_object: b254f284eda5b0ebb1da126a256d996f0f8be760\n   src/Gr4vy/Gr4vySDK.cs:\n     id: 78d019c58e3f\n     last_write_checksum: sha1:42798416e271ab46961e81505088b60a0e045e68\n@@ -4874,8 +4874,8 @@ trackedFiles:\n     pristine_git_object: a7053ccd58775f2c7ff2f6401ba068fb96871c48\n   src/Gr4vy/SDKConfig.cs:\n     id: 0e727b36146b\n-    last_write_checksum: sha1:cb8980b2cb32b8d8ef023c78cd2c9ff1da314ccd\n-    pristine_git_object: a84533ea2e2fb5a36bd95b79f5320e9aba202587\n+    last_write_checksum: sha1:fb41d573dada13bd34bf45d1027554477e2332fc\n+    pristine_git_object: b573a465c9cae5c647f4cc3f7d080a024489c66c\n   src/Gr4vy/Sessions.cs:\n     id: c84a7fed2fbf\n     last_write_checksum: sha1:1f2b7e0e8d27eba9688df32b3cc9fa7067b1b7e8\n@@ -4914,8 +4914,8 @@ trackedFiles:\n     pristine_git_object: 43995931e0ad9691940abd0276c53a38720baf63\n   src/Gr4vy/Utils/Constants.cs:\n     id: ad1333e279e9\n-    last_write_checksum: sha1:a4f2a456c374a5e0c0d26026228a85ffa267077a\n-    pristine_git_object: 59ad070236ab5146b0ed2740e2a3142cd0bd0f5f\n+    last_write_checksum: sha1:8d1dfe73f66d801b09a29c1208a0b4847ed54ae2\n+    pristine_git_object: 87ca093f87bea502c11ea04a344badbbcb97723f\n   src/Gr4vy/Utils/DecimalStrConverter.cs:\n     id: e52059f09f9a\n     last_write_checksum: sha1:30c79fed5d459d48e9c6083d5cfe4ee23356478b\n@@ -9295,9 +9295,6 @@ examples:\n           application/json: {\"type\": \"error\", \"code\": \"gateway_timeout\", \"status\": 504, \"message\": \"Request could not be processed\"}\n examplesVersion: 1.0.2\n generatedTests: {}\n-releaseNotes: |\n-  ## Csharp SDK Changes:\n-  * `Gr4vy.Transactions.Events.List()`:  `response.items[].Name.Enum(refundIngested)` **Added**\n generatedFiles:\n   - .gitattributes\n   - Gr4vy.sln"
+    },
+    {
+      "filename": ".speakeasy/gen.yaml",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -29,7 +29,7 @@ generation:\n     generateNewTests: false\n     skipResponseBodyAssertions: false\n csharp:\n-  version: 2.11.2\n+  version: 2.11.3\n   additionalDependencies:\n     - package: System.IdentityModel.Tokens.Jwt\n       version: 8.17.0"
+    },
+    {
+      "filename": ".speakeasy/workflow.lock",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -8,19 +8,19 @@ sources:\n             - latest\n     openapi:\n         sourceNamespace: openapi\n-        sourceRevisionDigest: sha256:138ae9cda97bff233af7629c0f3e88591897343e83c0f00be35c2c9f13b7b571\n-        sourceBlobDigest: sha256:e8f2179d2c68539a1f576fccd5973fc87a4b450d854a6247b039ce92c1b4a486\n+        sourceRevisionDigest: sha256:0d01d51680011629e11576f7a74c6f530fa878868fa3651f90e95ffa02afdb5d\n+        sourceBlobDigest: sha256:76f9c255dd25819121f6c32c12e294a1de565b8c1cb68911d1839a5e243508af\n         tags:\n             - latest\n             - 1.0.0\n targets:\n     csharp:\n         source: openapi\n         sourceNamespace: openapi\n-        sourceRevisionDigest: sha256:138ae9cda97bff233af7629c0f3e88591897343e83c0f00be35c2c9f13b7b571\n-        sourceBlobDigest: sha256:e8f2179d2c68539a1f576fccd5973fc87a4b450d854a6247b039ce92c1b4a486\n+        sourceRevisionDigest: sha256:0d01d51680011629e11576f7a74c6f530fa878868fa3651f90e95ffa02afdb5d\n+        sourceBlobDigest: sha256:76f9c255dd25819121f6c32c12e294a1de565b8c1cb68911d1839a5e243508af\n         codeSamplesNamespace: openapi-csharp-code-samples\n-        codeSamplesRevisionDigest: sha256:d4cae34579a78f3680e98cfcb11de4e9a8be41218a3afe54b961b73f5cf683ef\n+        codeSamplesRevisionDigest: sha256:cb06b881c0b143f311ed3064c128050a81b094c6b2ab15c88147dfb972723551\n workflow:\n     workflowVersion: 1.0.0\n     speakeasyVersion: latest"
+    },
+    {
+      "filename": "RELEASES.md",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -2648,4 +2648,14 @@ Based on:\n ### Generated\n - [csharp v2.11.2] .\n ### Releases\n-- [NuGet v2.11.2] https://www.nuget.org/packages/Gr4vy/2.11.2 - .\n\\ No newline at end of file\n+- [NuGet v2.11.2] https://www.nuget.org/packages/Gr4vy/2.11.2 - .\n+\n+## 2026-10-08 11:04:52\n+### Changes\n+Based on:\n+- OpenAPI Doc  \n+- Speakeasy CLI 1.801.0 (2.946.0) https://github.com/speakeasy-api/speakeasy\n+### Generated\n+- [csharp v2.11.3] .\n+### Releases\n+- [NuGet v2.11.3] https://www.nuget.org/packages/Gr4vy/2.11.3 - .\n\\ No newline at end of file"
+    },
+    {
+      "filename": "src/Gr4vy/Gr4vy.csproj",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -3,7 +3,7 @@\n   <PropertyGroup>\n     <IsPackable>true</IsPackable>\n     <PackageId>Gr4vy</PackageId>\n-    <Version>2.11.2</Version>\n+    <Version>2.11.3</Version>\n     <TargetFramework>net8.0</TargetFramework>\n     <Authors>Gr4vy</Authors>\n     <Copyright>Copyright (c) Gr4vy 2026</Copyright>"
+    },
+    {
+      "filename": "src/Gr4vy/SDKConfig.cs",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -69,7 +69,7 @@ public SDKConfig(ISpeakeasyHttpClient? client = null)\n                 }},\n             };\n             MerchantAccountId = null;\n-            UserAgent = \"speakeasy-sdk/csharp 2.11.2 2.946.0 1.0.0 Gr4vy\";\n+            UserAgent = \"speakeasy-sdk/csharp 2.11.3 2.946.0 1.0.0 Gr4vy\";\n             SecuritySource = null;\n             Hooks = new SDKHooks();\n             RetryConfig = null;"
+    },
+    {
+      "filename": "src/Gr4vy/Utils/Constants.cs",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -22,7 +22,7 @@ public static class Constants\n         /// <summary>\n         /// The version of the SDK.\n         /// </summary>\n-        public const string SdkVersion = \"2.11.2\";\n+        public const string SdkVersion = \"2.11.3\";\n \n         /// <summary>\n         /// The version of the SDK generator used to create this SDK."
+    }
+  ],
+  "genignore": [
+    "src/Gr4vy/Auth.cs",
+    "src/Gr4vy.Tests/AuthTest.cs"
+  ]
+}

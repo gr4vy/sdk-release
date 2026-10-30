@@ -1,0 +1,108 @@
+{
+  "pr": {
+    "number": 306,
+    "state": "closed",
+    "draft": false,
+    "commits": 2,
+    "changed_files": 9,
+    "title": "chore: 🐝 Update SDK - Generate SDK 1.7.33",
+    "user": {
+      "login": "github-actions[bot]"
+    },
+    "labels": [],
+    "head": {
+      "ref": "speakeasy-sdk-regen-1791457506",
+      "sha": "67d0641a9f2bef746e9c25290d9453094abdd582",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-php"
+      }
+    },
+    "base": {
+      "ref": "main",
+      "sha": "0f1e17f7e7f16473a968380f27955c4ad5c52080",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-php"
+      }
+    }
+  },
+  "commits": [
+    {
+      "sha": "3d8d81551a64df17d81b029d562bbd14982c2583",
+      "author": {
+        "login": "speakeasybot"
+      },
+      "committer": {
+        "login": "speakeasybot"
+      }
+    },
+    {
+      "sha": "67d0641a9f2bef746e9c25290d9453094abdd582",
+      "author": {
+        "login": "speakeasy-github[bot]"
+      },
+      "committer": {
+        "login": "speakeasybot"
+      }
+    }
+  ],
+  "files": [
+    {
+      "filename": ".speakeasy/gen.lock",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -1,19 +1,19 @@\n lockVersion: 2.0.0\n id: 16ed6937-9038-4c34-a8b6-e4732948f250\n management:\n-  docChecksum: e3cda6b4e00eb57ef60c64c54f9d00d6\n+  docChecksum: 7fb86ea2a0088f9db1dd29744e55b834\n   docVersion: 1.0.0\n-  speakeasyVersion: 1.800.1\n-  generationVersion: 2.943.0\n-  releaseVersion: 1.7.32\n-  configChecksum: 10468606dab37cfd5b21ea3b945903fe\n+  speakeasyVersion: 1.801.0\n+  generationVersion: 2.946.0\n+  releaseVersion: 1.7.33\n+  configChecksum: b7a18286bf73361d9779685697f7a575\n   repoURL: https://github.com/gr4vy/gr4vy-php.git\n   installationURL: https://github.com/gr4vy/gr4vy-php.git\n   published: true\n persistentEdits:\n-  generation_id: 933cff47-bc89-4362-ab41-619b1fb9493d\n-  pristine_commit_hash: 756ceb042d1f70b6ef26c02abe9a178355fad4e5\n-  pristine_tree_hash: 2847517a434959cc4f5ceb39484bae67e4921010\n+  generation_id: 4557c1e4-d1bb-4a83-a177-53ba65e1841b\n+  pristine_commit_hash: b7358114b576f0b11f5910d6ef5b53f70dba244e\n+  pristine_tree_hash: dd8548769e896a9470156948f623c63165523908\n features:\n   php:\n     constsAndDefaults: 0.2.2\n@@ -1421,8 +1421,8 @@ trackedFiles:\n     pristine_git_object: 435e20ecd12e579ee7d2f4cf4a8bf026078f42f6\n   docs/ListTransactionsRequest.md:\n     id: 1632f9925045\n-    last_write_checksum: sha1:329928163d5158ca9384d6c706395c5d68de0511\n-    pristine_git_object: cbd54a940164ab0b1a97869a671dd4f0848401b7\n+    last_write_checksum: sha1:c03a8c2559279c92f5af9d9641427064a2f0506c\n+    pristine_git_object: 55618d6461c0df5dd8d66ba64c2487b649596971\n   docs/ListTransactionsResponse.md:\n     id: 6e881c224fa6\n     last_write_checksum: sha1:749d87500a0a818b9948731450da223541a28dd6\n@@ -1437,12 +1437,12 @@ trackedFiles:\n     pristine_git_object: 77f7052dd456ac2f5431e6c4ce0ea03bedb8d095\n   docs/MerchantAccount.md:\n     id: adf45086084e\n-    last_write_checksum: sha1:0c358857e1eedb198b1df3871eb43b11c09be7c4\n-    pristine_git_object: 4593645492f18a93d659b4bb698045966c9c08a5\n+    last_write_checksum: sha1:7b27314312497604eeea4d63f8a7413ca992b0cd\n+    pristine_git_object: 90610ef6a3ef9017fa2130c586849dc1a625d7cc\n   docs/MerchantAccountCreate.md:\n     id: ff87c07ae1ea\n-    last_write_checksum: sha1:2fb016f856ab8693abb141b30efe8ccc3430f165\n-    pristine_git_object: fc06fcccbd8b757c691b02abe4445c9d04683196\n+    last_write_checksum: sha1:34e9fd703b7dce0ac3b4776bf8a8a290d78b7fe5\n+    pristine_git_object: f5a9eb2bc7e5a652203c9edb50cd3b91a17f4b3e\n   docs/MerchantAccountSummary.md:\n     id: 0307c7bca748\n     last_write_checksum: sha1:77abcbbee0dffc23e2d78bed168a41c493260390\n@@ -1465,8 +1465,8 @@ trackedFiles:\n     pristine_git_object: 461dfca2ad3292525a5f1b44991227d51e894633\n   docs/MerchantAccountUpdate.md:\n     id: fa847253338a\n-    last_write_checksum: sha1:bb35417fad7480f189e5d87986e4b6cf64cfd92f\n-    pristine_git_object: 4862b9a359ce0676afded6c1b5ac6e2a28fe27f8\n+    last_write_checksum: sha1:ca3929e3e9ddb291fbed8e3110fdfacb8619d237\n+    pristine_git_object: b2fa9a5e193fe46c4f71846c0bd65baaf7ed25ee\n   docs/MerchantAccounts.md:\n     id: 8d22a6c8da0c\n     last_write_checksum: sha1:da4984ff5f99256e4b7b7d09625946e8b238e5b5\n@@ -4669,8 +4669,8 @@ trackedFiles:\n     pristine_git_object: e176bdc6e712633942afda5189209d52723fd2c5\n   src/SDKConfiguration.php:\n     id: 9d60ab0bec0b\n-    last_write_checksum: sha1:743c4b4fa0e61abd46986f48d9ec826de7a516e5\n-    pristine_git_object: 4c4ddce308de8a706587099f3858f9c73d501bc9\n+    last_write_checksum: sha1:11a343acabb88c852cbe9fb31bfc5aeb41d0e0bd\n+    pristine_git_object: aaa0e1ad24f61769b860b856c6490e7920e49329\n   src/SEPABankPaymentMethodCreate.php:\n     id: fe251daedf19\n     last_write_checksum: sha1:808d4cccb2dccc84de1776511f05aa12a51da676"
+    },
+    {
+      "filename": ".speakeasy/gen.yaml",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -30,7 +30,7 @@ generation:\n     generateNewTests: false\n     skipResponseBodyAssertions: false\n php:\n-  version: 1.7.32\n+  version: 1.7.33\n   additionalDependencies:\n     autoload: {}\n     autoload-dev:"
+    },
+    {
+      "filename": ".speakeasy/workflow.lock",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -1,20 +1,20 @@\n-speakeasyVersion: 1.800.1\n+speakeasyVersion: 1.801.0\n sources:\n     openapi:\n         sourceNamespace: openapi-php\n-        sourceRevisionDigest: sha256:e4399ffb1c6e0576f91fa2a5825ec6455070ae12620882fc66d6b59942c360e3\n-        sourceBlobDigest: sha256:90160f61ddf72ee46b23533a37a1f3919e57d3ef7ebfb62f6d1f88a2084fb98a\n+        sourceRevisionDigest: sha256:db98f17472ee48cccf2b4aa9ea5af5a3c985a14db68c95a9f9491f571ea71a9e\n+        sourceBlobDigest: sha256:241950dcb8a7a62e218dd9a4b52f4f9390f3bc5aeacc34d5cc2d5798cbeebbb3\n         tags:\n             - latest\n             - 1.0.0\n targets:\n     php:\n         source: openapi\n         sourceNamespace: openapi-php\n-        sourceRevisionDigest: sha256:e4399ffb1c6e0576f91fa2a5825ec6455070ae12620882fc66d6b59942c360e3\n-        sourceBlobDigest: sha256:90160f61ddf72ee46b23533a37a1f3919e57d3ef7ebfb62f6d1f88a2084fb98a\n+        sourceRevisionDigest: sha256:db98f17472ee48cccf2b4aa9ea5af5a3c985a14db68c95a9f9491f571ea71a9e\n+        sourceBlobDigest: sha256:241950dcb8a7a62e218dd9a4b52f4f9390f3bc5aeacc34d5cc2d5798cbeebbb3\n         codeSamplesNamespace: openapi-php-code-samples\n-        codeSamplesRevisionDigest: sha256:c96ec82efbfb67f14a3c8931d81ce07fa1430c695ee10a3a02dcdab200e3c3d5\n+        codeSamplesRevisionDigest: sha256:82d893d9a6dd63044a8f03acac1bc1d6d4334142ad727f4af8cbc4d3e55629d0\n workflow:\n     workflowVersion: 1.0.0\n     speakeasyVersion: latest"
+    },
+    {
+      "filename": "RELEASES.md",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -2408,4 +2408,14 @@ Based on:\n ### Generated\n - [php v1.7.32] .\n ### Releases\n-- [Composer v1.7.32] https://packagist.org/packages/gr4vy/gr4vy-php#v1.7.32 - .\n\\ No newline at end of file\n+- [Composer v1.7.32] https://packagist.org/packages/gr4vy/gr4vy-php#v1.7.32 - .\n+\n+## 2026-10-08 11:04:47\n+### Changes\n+Based on:\n+- OpenAPI Doc  \n+- Speakeasy CLI 1.801.0 (2.946.0) https://github.com/speakeasy-api/speakeasy\n+### Generated\n+- [php v1.7.33] .\n+### Releases\n+- [Composer v1.7.33] https://packagist.org/packages/gr4vy/gr4vy-php#v1.7.33 - .\n\\ No newline at end of file"
+    },
+    {
+      "filename": "docs/ListTransactionsRequest.md",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": null
+    },
+    {
+      "filename": "docs/MerchantAccount.md",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": null
+    },
+    {
+      "filename": "docs/MerchantAccountCreate.md",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": null
+    },
+    {
+      "filename": "docs/MerchantAccountUpdate.md",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": null
+    },
+    {
+      "filename": "src/SDKConfiguration.php",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -35,11 +35,11 @@ class SDKConfiguration\n \n     public string $openapiDocVersion = '1.0.0';\n \n-    public string $sdkVersion = '1.7.32';\n+    public string $sdkVersion = '1.7.33';\n \n-    public string $genVersion = '2.943.0';\n+    public string $genVersion = '2.946.0';\n \n-    public string $userAgent = 'speakeasy-sdk/php 1.7.32 2.943.0 1.0.0 gr4vy/gr4vy-php';\n+    public string $userAgent = 'speakeasy-sdk/php 1.7.33 2.946.0 1.0.0 gr4vy/gr4vy-php';\n     /** @var array<string, array<string, array<string, mixed>>> */\n     public ?array $globals = [\n         'parameters' => [],"
+    }
+  ],
+  "genignore": [
+    "src/Auth.php",
+    "Tests/AuthTest.php"
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "pr": {
+    "number": 332,
+    "state": "closed",
+    "draft": false,
+    "commits": 2,
+    "changed_files": 7,
+    "title": "chore: 🐝 Update SDK - Generate SDK 2.19.24",
+    "user": {
+      "login": "github-actions[bot]"
+    },
+    "labels": [],
+    "head": {
+      "ref": "speakeasy-sdk-regen-1791457517",
+      "sha": "268ec59dcb5d2fddba6cff95ce0c93b35764e9fb",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-java"
+      }
+    },
+    "base": {
+      "ref": "main",
+      "sha": "6d4d7199a823d50d695f595395ac3231d610dfe2",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-java"
+      }
+    }
+  },
+  "commits": [
+    {
+      "sha": "79c39a320ca7f7c019f9b1f6891c8e3026a00ca4",
+      "author": {
+        "login": "speakeasybot"
+      },
+      "committer": {
+        "login": "speakeasybot"
+      }
+    },
+    {
+      "sha": "268ec59dcb5d2fddba6cff95ce0c93b35764e9fb",
+      "author": {
+        "login": "speakeasy-github[bot]"
+      },
+      "committer": {
+        "login": "speakeasybot"
+      }
+    }
+  ],
+  "files": [
+    {
+      "filename": ".speakeasy/gen.lock",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -1,19 +1,19 @@\n lockVersion: 2.0.0\n id: 5bbaa3a9-baa0-471b-ba6a-13fd88e8c119\n management:\n-  docChecksum: 71a468fd1fb2c390d488dbf23e5901de\n+  docChecksum: 74e7f9943eb7fc497c33f4412f22f900\n   docVersion: 1.0.0\n   speakeasyVersion: 1.801.0\n   generationVersion: 2.946.0\n-  releaseVersion: 2.19.23\n-  configChecksum: 6631ad991e0231ee8a7328f557f2f5a5\n+  releaseVersion: 2.19.24\n+  configChecksum: a9c74739cdf121bb18e972df3b76892b\n   repoURL: https://github.com/gr4vy/gr4vy-java.git\n   installationURL: https://github.com/gr4vy/gr4vy-java\n   published: true\n persistentEdits:\n-  generation_id: 4910981d-3c81-4888-a41b-bb165f92c006\n-  pristine_commit_hash: 4538b2afd243053b82805bfb2dbfa114e75eae23\n-  pristine_tree_hash: 9bb0ca8305c2b061ac3fd4db028d30e671c8ef21\n+  generation_id: c884f1c2-886a-4d26-b25c-787122e101ee\n+  pristine_commit_hash: 662baeae5241da87b213b4180a48a55479e3872b\n+  pristine_tree_hash: 473905c354fbfdab568c84e1e091925ae669101d\n features:\n   java:\n     additionalDependencies: 0.1.0\n@@ -2891,8 +2891,8 @@ trackedFiles:\n     pristine_git_object: 15c4e4642f204ccb312d8814155b69e153b4e19b\n   gradle.properties:\n     id: 2afbb999f001\n-    last_write_checksum: sha1:5d0f748c10d108d6e6fbed2f717bec0d69872b2a\n-    pristine_git_object: 8edb06ada4eff32a086e4f4a04193912890815cd\n+    last_write_checksum: sha1:fb66e79fc70726f1684e400dde178cd3949fac1d\n+    pristine_git_object: 5fc4739c4a78ea1b24c0d6b85d16da8bb9150bc0\n   gradle/wrapper/gradle-wrapper.jar:\n     id: ec27dae6e852\n     last_write_checksum: sha1:f725fb1467084142d74fd7cd8eab691ab3442611\n@@ -3235,8 +3235,8 @@ trackedFiles:\n     pristine_git_object: b50475cc7f6041d63c4569256e4ff1850b20d30b\n   src/main/java/com/gr4vy/sdk/SDKConfiguration.java:\n     id: 73a7edeaca45\n-    last_write_checksum: sha1:11093075e18140de780c5b0b828ae61256435299\n-    pristine_git_object: 11a351db731545d9e2c2bdbadd6a987ec64e3247\n+    last_write_checksum: sha1:b1d63f7285dbf70b2f170e41fa088fcfeed0d882\n+    pristine_git_object: d44ba0c44a13549b13a28f65ff7c9ab2acb61141\n   src/main/java/com/gr4vy/sdk/SecuritySource.java:\n     id: 1b6add6b9b50\n     last_write_checksum: sha1:2f365cc823c6243188e83f4df618c9737fcee8bd\n@@ -12499,9 +12499,6 @@ examples:\n           application/json: {\"type\": \"error\", \"code\": \"gateway_timeout\", \"status\": 504, \"message\": \"Request could not be processed\"}\n examplesVersion: 1.0.2\n generatedTests: {}\n-releaseNotes: |\n-  ## Java SDK Changes:\n-  * `gr4vy.transactions.events.list()`:  `response.items[].name.enum(refundIngested)` **Added**\n generatedFiles:\n   - .gitattributes\n   - USAGE.md"
+    },
+    {
+      "filename": ".speakeasy/gen.yaml",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -30,7 +30,7 @@ generation:\n     generateNewTests: false\n     skipResponseBodyAssertions: false\n java:\n-  version: 2.19.23\n+  version: 2.19.24\n   additionalDependencies:\n     - testImplementation:org.junit.jupiter:junit-jupiter:5.10.0\n     - implementation:com.auth0:java-jwt:4.5.0"
+    },
+    {
+      "filename": ".speakeasy/workflow.lock",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -9,8 +9,8 @@ sources:\n             - 1.0.0\n     openapi:\n         sourceNamespace: openapi\n-        sourceRevisionDigest: sha256:bb122035fca0ffa28323087f1fb5cd086894f80b3e078dd58f47504a982ac2dd\n-        sourceBlobDigest: sha256:14ca5fa6ca477fa88ca030feb0bcc11a853ec493dfc84720a791d38c4c4d769a\n+        sourceRevisionDigest: sha256:465ffc9416b1595601455a4fa8524944ea636f77627333746830f8aca11ac1ae\n+        sourceBlobDigest: sha256:cc950a1c77725a0b14ff591b1a6bdfe0d8554cf453f81524e535ac74db79bfda\n         tags:\n             - latest\n             - 1.0.0\n@@ -25,10 +25,10 @@ targets:\n     java:\n         source: openapi\n         sourceNamespace: openapi\n-        sourceRevisionDigest: sha256:bb122035fca0ffa28323087f1fb5cd086894f80b3e078dd58f47504a982ac2dd\n-        sourceBlobDigest: sha256:14ca5fa6ca477fa88ca030feb0bcc11a853ec493dfc84720a791d38c4c4d769a\n+        sourceRevisionDigest: sha256:465ffc9416b1595601455a4fa8524944ea636f77627333746830f8aca11ac1ae\n+        sourceBlobDigest: sha256:cc950a1c77725a0b14ff591b1a6bdfe0d8554cf453f81524e535ac74db79bfda\n         codeSamplesNamespace: openapi-java-code-samples\n-        codeSamplesRevisionDigest: sha256:a2785ad9d5ec635c741a57df380513c3241630499bb3965a78fec85a8f2a71c0\n+        codeSamplesRevisionDigest: sha256:24910c1ebd03ed10868902f8aef87f83b40a28cf9bb9517e929b95e0b854d6fc\n workflow:\n     workflowVersion: 1.0.0\n     speakeasyVersion: latest"
+    },
+    {
+      "filename": "README.md",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -59,15 +59,15 @@ The samples below show how a published SDK artifact is used:\n \n Gradle:\n ```groovy\n-implementation 'com.gr4vy:sdk:2.19.23'\n+implementation 'com.gr4vy:sdk:2.19.24'\n ```\n \n Maven:\n ```xml\n <dependency>\n     <groupId>com.gr4vy</groupId>\n     <artifactId>sdk</artifactId>\n-    <version>2.19.23</version>\n+    <version>2.19.24</version>\n </dependency>\n ```\n "
+    },
+    {
+      "filename": "RELEASES.md",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -2398,4 +2398,14 @@ Based on:\n ### Generated\n - [java v2.19.23] .\n ### Releases\n-- [Maven Central v2.19.23] https://central.sonatype.com/artifact/com.gr4vy/sdk/2.19.23 - .\n\\ No newline at end of file\n+- [Maven Central v2.19.23] https://central.sonatype.com/artifact/com.gr4vy/sdk/2.19.23 - .\n+\n+## 2026-10-08 11:04:54\n+### Changes\n+Based on:\n+- OpenAPI Doc  \n+- Speakeasy CLI 1.801.0 (2.946.0) https://github.com/speakeasy-api/speakeasy\n+### Generated\n+- [java v2.19.24] .\n+### Releases\n+- [Maven Central v2.19.24] https://central.sonatype.com/artifact/com.gr4vy/sdk/2.19.24 - .\n\\ No newline at end of file"
+    },
+    {
+      "filename": "gradle.properties",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -1,4 +1,4 @@\n groupId=com.gr4vy\n artifactId=sdk\n-version=2.19.23\n+version=2.19.24\n org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g"
+    },
+    {
+      "filename": "src/main/java/com/gr4vy/sdk/SDKConfiguration.java",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -22,7 +22,7 @@ public class SDKConfiguration {\n \n     private static final String LANGUAGE = \"java\";\n     public static final String OPENAPI_DOC_VERSION = \"1.0.0\";\n-    public static final String SDK_VERSION = \"2.19.23\";\n+    public static final String SDK_VERSION = \"2.19.24\";\n     public static final String GEN_VERSION = \"2.946.0\";\n     private static final String BASE_PACKAGE = \"com.gr4vy.sdk\";\n     public static final String USER_AGENT = "
+    }
+  ],
+  "genignore": [
+    "src/main/java/com/gr4vy/sdk/Auth.java",
+    "src/test/java/com/gr4vy/sdk/AuthTest.java"
+  ]
+}

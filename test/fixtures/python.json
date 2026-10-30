@@ -1,0 +1,90 @@
+{
+  "pr": {
+    "number": 335,
+    "state": "closed",
+    "draft": false,
+    "commits": 2,
+    "changed_files": 6,
+    "title": "chore: 🐝 Update SDK - Generate SDK 2.4.27",
+    "user": {
+      "login": "github-actions[bot]"
+    },
+    "labels": [],
+    "head": {
+      "ref": "speakeasy-sdk-regen-1791457508",
+      "sha": "3f3534e5c7bd0cf1d7d9bc2413539136e3951489",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-python"
+      }
+    },
+    "base": {
+      "ref": "main",
+      "sha": "07e974207d9126b9799340d09dcbb9da34782a4e",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-python"
+      }
+    }
+  },
+  "commits": [
+    {
+      "sha": "c5c1c1b2ec1b97b8e20d7c4e8d107030e9513bd1",
+      "author": {
+        "login": "speakeasybot"
+      },
+      "committer": {
+        "login": "speakeasybot"
+      }
+    },
+    {
+      "sha": "3f3534e5c7bd0cf1d7d9bc2413539136e3951489",
+      "author": {
+        "login": "speakeasy-github[bot]"
+      },
+      "committer": {
+        "login": "speakeasybot"
+      }
+    }
+  ],
+  "files": [
+    {
+      "filename": ".speakeasy/gen.lock",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -1,19 +1,19 @@\n lockVersion: 2.0.0\n id: 833c6a67-4a4a-4ef1-ba24-165a29264e4a\n management:\n-  docChecksum: b0c20ea3c0acbc29383eb7098789428a\n+  docChecksum: d0fdbcfe7852d0624109a648614c73aa\n   docVersion: 1.0.0\n   speakeasyVersion: 1.801.0\n   generationVersion: 2.946.0\n-  releaseVersion: 2.4.26\n-  configChecksum: 6acf4bddda763fea305958a289d56fa7\n+  releaseVersion: 2.4.27\n+  configChecksum: f64ecb3c341235eae2100e9bdfbc26c5\n   repoURL: https://github.com/gr4vy/gr4vy-python.git\n   installationURL: https://github.com/gr4vy/gr4vy-python.git\n   published: true\n persistentEdits:\n-  generation_id: b7c99597-68e6-4d90-a200-d4f4fcec29ca\n-  pristine_commit_hash: 013b30239489c31850a01c500e8aadbce5dc5a05\n-  pristine_tree_hash: 817dfc6384b10213d5f11e2315cb3bc9a2fcbfc5\n+  generation_id: 3142881a-417f-46a5-925f-0609dd445af9\n+  pristine_commit_hash: 1451945548def59653e4eaaba99650cbc77395b3\n+  pristine_tree_hash: 1ec875cea06430944c2ef400a34cb6e640d457d8\n features:\n   python:\n     additionalDependencies: 1.1.0\n@@ -2909,8 +2909,8 @@ trackedFiles:\n     pristine_git_object: cb9c15d314c1930557401074329ed7a737147919\n   pyproject.toml:\n     id: 5d07e7d72637\n-    last_write_checksum: sha1:3d6a33546e06e38e0d57719bc60d65a59d645814\n-    pristine_git_object: d6565f65432ab099edc9499233242fc89123bcbd\n+    last_write_checksum: sha1:d62d17058ff52221d703193af917040e2172fa15\n+    pristine_git_object: 0fd6d75109a9abc40155ccb112bf010c3f32b03c\n   scripts/prepare_readme.py:\n     id: e0c5957a6035\n     last_write_checksum: sha1:63a92abbd1de3323613f0d4c1ae4412076577710\n@@ -2937,8 +2937,8 @@ trackedFiles:\n     pristine_git_object: f8ef109bb6a9dbe37d0a7092606176a0738986fd\n   src/gr4vy/_version.py:\n     id: 1b5ad1da47aa\n-    last_write_checksum: sha1:fc9fdab9710d7389ab016624a3da2a48ced5b3ef\n-    pristine_git_object: 6988e52c481e60b9f9eff4d0a021e65f75c562a0\n+    last_write_checksum: sha1:a310e6d0a768555c17361dc4a905444c1636b862\n+    pristine_git_object: 3d801952b4c1acf49348ea6c1e96c3fbb313f12c\n   src/gr4vy/account_updater.py:\n     id: 6dc8f39e2fb9\n     last_write_checksum: sha1:fabc79a59dd06fb927ce2d834fbafbcad5836a4b\n@@ -9517,9 +9517,6 @@ examples:\n           application/json: {\"type\": \"error\", \"code\": \"gateway_timeout\", \"status\": 504, \"message\": \"Request could not be processed\"}\n examplesVersion: 1.0.2\n generatedTests: {}\n-releaseNotes: |\n-  ## Python SDK Changes:\n-  * `gr4vy.transactions.events.list()`:  `response.items[].name.enum(refund_ingested)` **Added**\n generatedFiles:\n   - .gitattributes\n   - .vscode/settings.json"
+    },
+    {
+      "filename": ".speakeasy/gen.yaml",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -29,7 +29,7 @@ generation:\n     generateNewTests: false\n     skipResponseBodyAssertions: false\n python:\n-  version: 2.4.26\n+  version: 2.4.27\n   additionalDependencies:\n     dev:\n       freezegun: ^1.5.1"
+    },
+    {
+      "filename": ".speakeasy/workflow.lock",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -2,19 +2,19 @@ speakeasyVersion: 1.801.0\n sources:\n     openapi:\n         sourceNamespace: openapi\n-        sourceRevisionDigest: sha256:b8a728067b2728e473603eda3bcff0e3c8d846d92de9ee5175f2e67cb4d50363\n-        sourceBlobDigest: sha256:796216c19528b62852d8117fe66bbacec04918f81eab5f514445b01731e3a707\n+        sourceRevisionDigest: sha256:30350e9f141f4c95e4f581c524d474e94dd44177acde74318c10294f5a3035e0\n+        sourceBlobDigest: sha256:e0a25b4f7427b2e57806ed664e1197df925685b71f4abb6aa5b24ad2f96ef066\n         tags:\n             - latest\n             - 1.0.0\n targets:\n     python:\n         source: openapi\n         sourceNamespace: openapi\n-        sourceRevisionDigest: sha256:b8a728067b2728e473603eda3bcff0e3c8d846d92de9ee5175f2e67cb4d50363\n-        sourceBlobDigest: sha256:796216c19528b62852d8117fe66bbacec04918f81eab5f514445b01731e3a707\n+        sourceRevisionDigest: sha256:30350e9f141f4c95e4f581c524d474e94dd44177acde74318c10294f5a3035e0\n+        sourceBlobDigest: sha256:e0a25b4f7427b2e57806ed664e1197df925685b71f4abb6aa5b24ad2f96ef066\n         codeSamplesNamespace: openapi-python-code-samples\n-        codeSamplesRevisionDigest: sha256:98f952667f8090bdb588600574ad36b1e3ab456fe53d05e8a314c79f5cffab23\n+        codeSamplesRevisionDigest: sha256:ece760987aba8aa6c3adc820a09b6303e86d5a61fa1b8f1c315b356812b64bf7\n workflow:\n     workflowVersion: 1.0.0\n     speakeasyVersion: latest"
+    },
+    {
+      "filename": "RELEASES.md",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -2728,4 +2728,14 @@ Based on:\n ### Generated\n - [python v2.4.26] .\n ### Releases\n-- [PyPI v2.4.26] https://pypi.org/project/gr4vy/2.4.26 - .\n\\ No newline at end of file\n+- [PyPI v2.4.26] https://pypi.org/project/gr4vy/2.4.26 - .\n+\n+## 2026-10-08 11:04:47\n+### Changes\n+Based on:\n+- OpenAPI Doc  \n+- Speakeasy CLI 1.801.0 (2.946.0) https://github.com/speakeasy-api/speakeasy\n+### Generated\n+- [python v2.4.27] .\n+### Releases\n+- [PyPI v2.4.27] https://pypi.org/project/gr4vy/2.4.27 - .\n\\ No newline at end of file"
+    },
+    {
+      "filename": "pyproject.toml",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -1,7 +1,7 @@\n \n [project]\n name = \"gr4vy\"\n-version = \"2.4.26\"\n+version = \"2.4.27\"\n description = \"Python Client SDK Generated by Speakeasy.\"\n authors = [{ name = \"Gr4vy\" },]\n readme = \"README-PYPI.md\""
+    },
+    {
+      "filename": "src/gr4vy/_version.py",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -3,10 +3,10 @@\n import importlib.metadata\n \n __title__: str = \"gr4vy\"\n-__version__: str = \"2.4.26\"\n+__version__: str = \"2.4.27\"\n __openapi_doc_version__: str = \"1.0.0\"\n __gen_version__: str = \"2.946.0\"\n-__user_agent__: str = \"speakeasy-sdk/python 2.4.26 2.946.0 1.0.0 gr4vy\"\n+__user_agent__: str = \"speakeasy-sdk/python 2.4.27 2.946.0 1.0.0 gr4vy\"\n \n try:\n     if __package__ is not None:"
+    }
+  ],
+  "genignore": [
+    "src/gr4vy/auth.py",
+    "tests/test_auth.py"
+  ]
+}

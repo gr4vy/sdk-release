@@ -1,0 +1,32 @@
+name: SDK publish gate
+description: Decides whether a green main commit publishes, and whether it needs a human to approve it.
+inputs:
+  head-sha:
+    description: The main commit whose live tests just passed.
+    required: true
+  bot-login:
+    description: The release bot's login, e.g. gr4vy-sdk-release[bot].
+    required: true
+  token:
+    description: A token that can read the repo.
+    default: ${{ github.token }}
+outputs:
+  publish:
+    description: true when this commit carries an unreleased version.
+    value: ${{ steps.gate.outputs.publish }}
+  mode:
+    description: auto when every change since the last release was merged by the bot, otherwise manual.
+    value: ${{ steps.gate.outputs.mode }}
+  version:
+    value: ${{ steps.gate.outputs.version }}
+runs:
+  using: composite
+  steps:
+    - id: gate
+      shell: bash
+      env:
+        GITHUB_TOKEN: ${{ inputs.token }}
+        HEAD_SHA: ${{ inputs.head-sha }}
+        BOT_LOGIN: ${{ inputs.bot-login }}
+        GATE: ${{ github.action_path }}/../guard/publish-gate.mjs
+      run: node "$GATE"

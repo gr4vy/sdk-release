@@ -1,0 +1,36 @@
+{
+  "baseBranch": "main",
+  "prAuthor": "github-actions[bot]",
+  "branchPrefix": "speakeasy-sdk-regen-",
+  "pushActors": [
+    "speakeasy-github[bot]"
+  ],
+  "commitAuthors": [
+    "speakeasybot",
+    "speakeasy-github[bot]"
+  ],
+  "allowed": [
+    "src/gr4vy/**",
+    "docs/**",
+    "README.md",
+    "RELEASES.md",
+    "USAGE.md",
+    ".speakeasy/gen.lock",
+    ".speakeasy/workflow.lock"
+  ],
+  "versionOnly": [
+    ".speakeasy/gen.yaml",
+    "pyproject.toml"
+  ],
+  "blocked": [
+    ".github/**",
+    ".speakeasy/workflow.yaml",
+    ".speakeasy/scripts/**",
+    "scripts/**",
+    ".genignore",
+    ".gitattributes",
+    "src/gr4vy/_hooks/**",
+    "src/gr4vy/webhooks.py",
+    "tests/**"
+  ]
+}

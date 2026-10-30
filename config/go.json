@@ -1,0 +1,43 @@
+{
+  "baseBranch": "main",
+  "prAuthor": "github-actions[bot]",
+  "branchPrefix": "speakeasy-sdk-regen-",
+  "pushActors": [
+    "speakeasy-github[bot]"
+  ],
+  "commitAuthors": [
+    "speakeasybot",
+    "speakeasy-github[bot]"
+  ],
+  "allowed": [
+    "*.go",
+    "models/**",
+    "internal/**",
+    "optionalnullable/**",
+    "retry/**",
+    "types/**",
+    "docs/**",
+    "README.md",
+    "RELEASES.md",
+    "USAGE.md",
+    ".speakeasy/gen.lock",
+    ".speakeasy/workflow.lock"
+  ],
+  "versionOnly": [
+    ".speakeasy/gen.yaml"
+  ],
+  "blocked": [
+    ".github/**",
+    ".speakeasy/workflow.yaml",
+    ".speakeasy/scripts/**",
+    "scripts/**",
+    ".genignore",
+    ".gitattributes",
+    "internal/hooks/**",
+    "webhooks.go",
+    "test/**",
+    "**/*_test.go",
+    "go.mod",
+    "go.sum"
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "baseBranch": "main",
+  "prAuthor": "github-actions[bot]",
+  "branchPrefix": "speakeasy-sdk-regen-",
+  "pushActors": [
+    "speakeasy-github[bot]"
+  ],
+  "commitAuthors": [
+    "speakeasybot",
+    "speakeasy-github[bot]"
+  ],
+  "allowed": [
+    "src/Gr4vy/**",
+    "NUGET.md",
+    "docs/**",
+    "README.md",
+    "RELEASES.md",
+    "USAGE.md",
+    ".speakeasy/gen.lock",
+    ".speakeasy/workflow.lock"
+  ],
+  "versionOnly": [
+    ".speakeasy/gen.yaml",
+    "src/Gr4vy/Gr4vy.csproj"
+  ],
+  "blocked": [
+    ".github/**",
+    ".speakeasy/workflow.yaml",
+    ".speakeasy/scripts/**",
+    "scripts/**",
+    ".genignore",
+    ".gitattributes",
+    "src/Gr4vy/Hooks/**",
+    "src/Gr4vy/Webhooks.cs",
+    "src/Gr4vy.Tests/**"
+  ]
+}
