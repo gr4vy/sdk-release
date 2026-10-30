@@ -1,6 +1,3 @@
-// Decides whether a PR whose CI just went green may merge without a human.
-// Env: GITHUB_TOKEN (release bot App), GITHUB_REPOSITORY, RUN_ID, SDK_CONFIG,
-// GITHUB_OUTPUT. Reads everything else from the API, never from the PR checkout.
 import { readFileSync, appendFileSync } from 'node:fs';
 import { client } from './github.mjs';
 import { evaluate } from './guard.mjs';

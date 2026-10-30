@@ -1,5 +1,4 @@
-// Minimal glob matcher: `**` crosses directories, `*` and `?` do not.
-export function globToRegExp(glob) {
+function globToRegExp(glob) {
   let re = '';
   for (let i = 0; i < glob.length; i++) {
     const c = glob[i];
