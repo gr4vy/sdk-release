@@ -9,8 +9,8 @@ Shared release tooling for the six Gr4vy server-side SDKs. Each SDK repo pins th
 
 A PR merges unattended only when all of these hold:
 
-- It was opened by `github-actions[bot]` on a `speakeasy-sdk-regen-*` branch in the same repo, against `main`.
-- CI passed on the PR's head commit, and that push came from `speakeasy-github[bot]`.
+- It was opened by the config's `prAuthor` on a `speakeasy-sdk-regen-*` branch in the same repo, against `main`. That's the gr4vy-sdk-generate App once an SDK hands Speakeasy its token, and `github-actions[bot]` before that.
+- CI passed on the PR's head commit, and that push came from one of the config's `pushActors`.
 - Every commit is attributed to Speakeasy.
 - Every changed file is a generated path (`allowed`), and none is `blocked` or listed in the repo's `.genignore`. Blocked always wins.
 - `versionOnly` files change nothing except version numbers, and only to the new `releaseVersion`.
@@ -21,4 +21,4 @@ To change a list, open a PR here, then bump the pinned SHA in the SDK repo. The 
 node --test 'test/*.test.mjs'
 ```
 
-`test/fixtures/` holds real merged Speakeasy PRs from each SDK.
+`test/fixtures/` holds real merged Speakeasy PRs from each SDK. TypeScript's has its author changed to the gr4vy-sdk-generate App and Speakeasy's empty CI-trigger commit removed, until a real PR from the App replaces it.

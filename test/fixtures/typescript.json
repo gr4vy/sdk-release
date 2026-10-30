@@ -3,11 +3,11 @@
     "number": 367,
     "state": "closed",
     "draft": false,
-    "commits": 2,
+    "commits": 1,
     "changed_files": 9,
     "title": "chore: 🐝 Update SDK - Generate SDK TYPESCRIPT 2.4.37",
     "user": {
-      "login": "github-actions[bot]"
+      "login": "gr4vy-sdk-generate[bot]"
     },
     "labels": [],
     "head": {
@@ -30,15 +30,6 @@
       "sha": "8e3dac3752f5cea220c6f23d40d32ad798327057",
       "author": {
         "login": "speakeasybot"
-      },
-      "committer": {
-        "login": "speakeasybot"
-      }
-    },
-    {
-      "sha": "e62561858b2f3c28820c7f3a8ea79b05d93f433f",
-      "author": {
-        "login": "speakeasy-github[bot]"
       },
       "committer": {
         "login": "speakeasybot"

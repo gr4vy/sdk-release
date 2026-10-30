@@ -11,7 +11,7 @@ function load(sdk) {
   const fx = JSON.parse(readFileSync(new URL(`fixtures/${sdk}.json`, import.meta.url)));
   const config = JSON.parse(readFileSync(new URL(`../config/${sdk}.json`, import.meta.url)));
   const pr = { ...fx.pr, state: 'open' };
-  const run = { head_sha: pr.head.sha, event: 'pull_request', conclusion: 'success', actor: { login: 'speakeasy-github[bot]' } };
+  const run = { head_sha: pr.head.sha, event: 'pull_request', conclusion: 'success', actor: { login: config.pushActors[0] } };
   return { pr, run, commits: fx.commits, files: fx.files, genignore: fx.genignore, config };
 }
 
@@ -36,6 +36,17 @@ test('a push by anyone but Speakeasy goes to a human', () => {
   const { ok, reasons } = evaluate({ ...input, run: { ...input.run, actor: { login: 'mallory' } } });
   assert.equal(ok, false);
   assert.match(reasons[0], /latest push was by mallory/);
+});
+
+test('typescript: only gr4vy-sdk-generate may open and push a Speakeasy PR', () => {
+  const input = load('typescript');
+  assert.deepEqual(input.config.pushActors, ['gr4vy-sdk-generate[bot]']);
+  for (const login of ['speakeasy-github[bot]', 'github-actions[bot]']) {
+    const { reasons } = evaluate({ ...input, run: { ...input.run, actor: { login } } });
+    assert.ok(reasons[0].startsWith(`latest push was by ${login}`));
+  }
+  const { reasons } = evaluate({ ...input, pr: { ...input.pr, user: { login: 'github-actions[bot]' } } });
+  assert.deepEqual(reasons, ['PR opened by github-actions[bot], not gr4vy-sdk-generate[bot]']);
 });
 
 test('a CI result for an older commit is not trusted', () => {
