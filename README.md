@@ -23,4 +23,4 @@ To change a list, open a PR here, then bump the pinned SHA in the SDK repo. The 
 node --test 'test/*.test.mjs'
 ```
 
-`test/fixtures/` holds real merged Speakeasy PRs from each SDK. Every SDK's has its author changed to the gr4vy-sdk-generate App and Speakeasy's empty CI-trigger commit removed, until an App PR merges unattended and replaces them. `typescript-new-gen-flag.json` is the App's first real PR (#373), which went to a human because Speakeasy added a setting to `gen.yaml`.
+`test/fixtures/` holds real merged Speakeasy PRs from each SDK. Each SDK's fixture has its author changed to the gr4vy-sdk-generate App and Speakeasy's empty CI-trigger commit removed, until an App PR merges unattended and replaces them. `typescript-new-gen-flag.json` is the App's first real PR (#373), which went to a human because Speakeasy added a setting to `gen.yaml`.
