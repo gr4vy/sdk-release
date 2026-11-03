@@ -1,6 +1,7 @@
 import { matchesAny } from './glob.mjs';
 
 const VERSION = /\d+(?:\.\d+)+(?:-[0-9A-Za-z.-]+)?/g;
+const VERSION_LINE = /^\s*(?:"version"\s*:|version\s*[:=]|<Version>)/i;
 
 export function evaluate({ pr, run, commits, files, config, genignore = [], manifests = {} }) {
   const reasons = [];
@@ -112,6 +113,7 @@ export function isVersionBumpTo(patch, releaseVersion) {
   const flush = () => {
     if (removed.length !== added.length) return false;
     for (let i = 0; i < removed.length; i++) {
+      if (!VERSION_LINE.test(added[i])) return false;
       if (removed[i].replace(VERSION, '<v>') !== added[i].replace(VERSION, '<v>')) return false;
       const versions = added[i].match(VERSION) ?? [];
       if (versions.length === 0 || versions.some((v) => v !== releaseVersion)) return false;

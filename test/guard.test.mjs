@@ -167,3 +167,10 @@ test('typescript: a dependency bump in package.json merges when its contents are
   const after = pkg({ version: '2.4.37', dependencies: { zod: '^3.25.0 || ^4.0.0' } });
   assert.deepEqual(evaluate({ ...input, manifests: { 'package.json': { before, after } } }), { ok: true, reasons: [] });
 });
+
+test('a version-only file may only change its version line', () => {
+  const bump = (from, to) => `@@ -1,3 +1,3 @@\n {\n-${from}\n+${to}\n }`;
+  assert.equal(isVersionBumpTo(bump('  "version": "2.4.39",', '  "version": "2.4.40",'), '2.4.40'), true);
+  assert.equal(isVersionBumpTo(bump('    "zod": "^4.6.6"', '    "zod": "^2.4.40"'), '2.4.40'), false);
+  assert.equal(isVersionBumpTo(bump('  foo: 1.2.3', '  foo: 2.4.40'), '2.4.40'), false);
+});
