@@ -1,13 +1,4 @@
 {
-  "baseBranch": "main",
-  "prAuthor": "gr4vy-sdk-generate[bot]",
-  "branchPrefix": "speakeasy-sdk-regen-",
-  "pushActors": [
-    "gr4vy-sdk-generate[bot]"
-  ],
-  "commitAuthors": [
-    "speakeasybot"
-  ],
   "allowed": [
     "src/**",
     "examples/**",

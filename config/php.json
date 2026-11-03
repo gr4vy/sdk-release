@@ -1,14 +1,4 @@
 {
-  "baseBranch": "main",
-  "prAuthor": "github-actions[bot]",
-  "branchPrefix": "speakeasy-sdk-regen-",
-  "pushActors": [
-    "speakeasy-github[bot]"
-  ],
-  "commitAuthors": [
-    "speakeasybot",
-    "speakeasy-github[bot]"
-  ],
   "allowed": [
     "src/**",
     "docs/**",

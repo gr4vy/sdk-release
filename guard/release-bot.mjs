@@ -1,12 +1,13 @@
-import { readFileSync, appendFileSync } from 'node:fs';
+import { appendFileSync } from 'node:fs';
 import { client } from './github.mjs';
 import { evaluate, releaseVersionIn } from './guard.mjs';
+import { loadConfig } from './config.mjs';
 
 const MARKER = '<!-- release-bot -->';
 const LABEL = 'needs-human';
 
 const repo = process.env.GITHUB_REPOSITORY;
-const config = JSON.parse(readFileSync(process.env.SDK_CONFIG, 'utf8'));
+const config = loadConfig(process.env.SDK_CONFIG);
 const gh = client(process.env.GITHUB_TOKEN);
 
 const run = await gh.get(`/repos/${repo}/actions/runs/${process.env.RUN_ID}`);

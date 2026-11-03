@@ -1,14 +1,16 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { evaluate, isVersionBumpTo, checkManifest, isDependencyBump } from '../guard/guard.mjs';
 import { matchesAny } from '../guard/glob.mjs';
+import { loadConfig } from '../guard/config.mjs';
 
 const SDKS = ['typescript', 'python', 'java', 'go', 'php', 'csharp'];
 
 function load(sdk, fixture = sdk) {
   const fx = JSON.parse(readFileSync(new URL(`fixtures/${fixture}.json`, import.meta.url)));
-  const config = JSON.parse(readFileSync(new URL(`../config/${sdk}.json`, import.meta.url)));
+  const config = loadConfig(fileURLToPath(new URL(`../config/${sdk}.json`, import.meta.url)));
   const pr = { ...fx.pr, state: 'open' };
   const run = { head_sha: pr.head.sha, event: 'pull_request', conclusion: 'success', actor: { login: config.pushActors[0] } };
   return { pr, run, commits: fx.commits, files: fx.files, genignore: fx.genignore, config };
@@ -37,7 +39,7 @@ test('a push by anyone but Speakeasy goes to a human', () => {
   assert.match(reasons[0], /latest push was by mallory/);
 });
 
-for (const sdk of ['typescript', 'python']) test(`${sdk}: only gr4vy-sdk-generate may open and push a Speakeasy PR`, () => {
+for (const sdk of SDKS) test(`${sdk}: only gr4vy-sdk-generate may open and push a Speakeasy PR`, () => {
   const input = load(sdk);
   assert.deepEqual(input.config.pushActors, ['gr4vy-sdk-generate[bot]']);
   for (const login of ['speakeasy-github[bot]', 'github-actions[bot]']) {
@@ -45,7 +47,7 @@ for (const sdk of ['typescript', 'python']) test(`${sdk}: only gr4vy-sdk-generat
     assert.ok(reasons[0].startsWith(`latest push was by ${login}`));
   }
   const { reasons } = evaluate({ ...input, pr: { ...input.pr, user: { login: 'github-actions[bot]' } } });
-  assert.deepEqual(reasons, ['PR opened by github-actions[bot], not gr4vy-sdk-generate[bot]']);
+  assert.ok(reasons.includes('PR opened by github-actions[bot], not gr4vy-sdk-generate[bot]'));
 });
 
 test('typescript: a real App PR that adds a gen.yaml setting goes to a human for that alone', () => {

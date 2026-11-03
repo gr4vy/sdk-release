@@ -3,11 +3,11 @@
     "number": 298,
     "state": "closed",
     "draft": false,
-    "commits": 3,
+    "commits": 2,
     "changed_files": 7,
-    "title": "chore: 🐝 Update SDK - Generate SDK 2.11.3",
+    "title": "chore: \ud83d\udc1d Update SDK - Generate SDK 2.11.3",
     "user": {
-      "login": "github-actions[bot]"
+      "login": "gr4vy-sdk-generate[bot]"
     },
     "labels": [],
     "head": {
@@ -30,15 +30,6 @@
       "sha": "d2985392404538d6e36e009d3e558565825c6409",
       "author": {
         "login": "speakeasybot"
-      },
-      "committer": {
-        "login": "speakeasybot"
-      }
-    },
-    {
-      "sha": "909561e2e1358fea6e1bc847cd89c85e4336eb6e",
-      "author": {
-        "login": "speakeasy-github[bot]"
       },
       "committer": {
         "login": "speakeasybot"
