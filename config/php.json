@@ -19,8 +19,14 @@
     ".speakeasy/workflow.lock"
   ],
   "versionOnly": [
-    ".speakeasy/gen.yaml",
+    ".speakeasy/gen.yaml"
+  ],
+  "manifests": [
     "composer.json"
+  ],
+  "manifestDependencyFields": [
+    "require",
+    "require-dev"
   ],
   "blocked": [
     ".github/**",

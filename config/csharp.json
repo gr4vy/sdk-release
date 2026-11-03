@@ -20,8 +20,13 @@
     ".speakeasy/workflow.lock"
   ],
   "versionOnly": [
-    ".speakeasy/gen.yaml",
-    "src/Gr4vy/Gr4vy.csproj"
+    ".speakeasy/gen.yaml"
+  ],
+  "dependencyFiles": [
+    {
+      "path": "src/Gr4vy/Gr4vy.csproj",
+      "format": "csproj"
+    }
   ],
   "blocked": [
     ".github/**",

@@ -21,10 +21,17 @@
     "RELEASES.md",
     "USAGE.md",
     ".speakeasy/gen.lock",
-    ".speakeasy/workflow.lock"
+    ".speakeasy/workflow.lock",
+    "go.sum"
   ],
   "versionOnly": [
     ".speakeasy/gen.yaml"
+  ],
+  "dependencyFiles": [
+    {
+      "path": "go.mod",
+      "format": "gomod"
+    }
   ],
   "blocked": [
     ".github/**",
@@ -36,8 +43,6 @@
     "internal/hooks/**",
     "webhooks.go",
     "test/**",
-    "**/*_test.go",
-    "go.mod",
-    "go.sum"
+    "**/*_test.go"
   ]
 }

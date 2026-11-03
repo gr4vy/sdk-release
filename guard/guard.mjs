@@ -3,7 +3,7 @@ import { matchesAny } from './glob.mjs';
 const VERSION = /\d+(?:\.\d+)+(?:-[0-9A-Za-z.-]+)?/g;
 const VERSION_LINE = /^\s*(?:"version"\s*:|version\s*[:=]|<Version>)/i;
 
-export function evaluate({ pr, run, commits, files, config, genignore = [], manifests = {} }) {
+export function evaluate({ pr, run, commits, files, config, genignore = [], manifests = {}, releaseVersion = findReleaseVersion(files) }) {
   const reasons = [];
   const fail = (msg) => reasons.push(msg);
 
@@ -32,7 +32,6 @@ export function evaluate({ pr, run, commits, files, config, genignore = [], mani
   }
 
   if (files.length !== pr.changed_files) fail(`could only read ${files.length} of ${pr.changed_files} changed files`);
-  const releaseVersion = findReleaseVersion(files);
   const blocked = [...config.blocked, ...genignore];
   for (const f of files) {
     const paths = f.previous_filename ? [f.previous_filename, f.filename] : [f.filename];
@@ -48,7 +47,15 @@ function checkFile(f, paths, { config, blocked, releaseVersion, manifests }) {
   const manifest = config.manifests?.includes(f.filename);
   if (manifest && manifests[f.filename]) {
     if (f.status !== 'modified') return `${f.status}, only dependency and version bumps are allowed`;
-    return checkManifest(manifests[f.filename], releaseVersion);
+    return checkManifest(manifests[f.filename], releaseVersion, config.manifestDependencyFields);
+  }
+  const dependencies = config.dependencyFiles?.find((d) => d.path === f.filename);
+  if (dependencies) {
+    if (f.status !== 'modified') return `${f.status}, only dependency and version bumps are allowed`;
+    if (f.patch == null) return 'diff too large to check';
+    return isBumpPatch(f.patch, releaseVersion, (was, is) => isDependencyBump(was, is, dependencies.format))
+      ? null
+      : `changes more than versions${releaseVersion ? ` (${releaseVersion}) and existing dependency versions` : ''}`;
   }
   if (manifest || paths.some((p) => matchesAny(p, config.versionOnly))) {
     if (f.status !== 'modified') return `${f.status}, only version bumps are allowed`;
@@ -62,7 +69,7 @@ function checkFile(f, paths, { config, blocked, releaseVersion, manifests }) {
 
 const DEPENDENCY_FIELDS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
 
-export function checkManifest({ before, after }, releaseVersion) {
+export function checkManifest({ before, after }, releaseVersion, dependencyFields = DEPENDENCY_FIELDS) {
   const old = parseObject(before);
   const now = parseObject(after);
   if (!old || !now) return 'is not a JSON object';
@@ -71,7 +78,7 @@ export function checkManifest({ before, after }, releaseVersion) {
       if (old.version === now.version) continue;
       if (!releaseVersion) return 'no new releaseVersion in .speakeasy/gen.lock to check the bump against';
       if (now.version !== releaseVersion) return `sets version ${now.version}, not ${releaseVersion}`;
-    } else if (DEPENDENCY_FIELDS.includes(field)) {
+    } else if (dependencyFields.includes(field)) {
       if (![old[field], now[field]].every((deps) => deps === undefined || isObject(deps))) return `has a malformed ${field}`;
       const was = Object.keys(old[field] ?? {});
       const is = Object.keys(now[field] ?? {});
@@ -79,7 +86,7 @@ export function checkManifest({ before, after }, releaseVersion) {
       const removed = was.filter((name) => !is.includes(name));
       if (added.length) return `adds ${field} ${added.join(', ')}`;
       if (removed.length) return `removes ${field} ${removed.join(', ')}`;
-      const elsewhere = is.filter((name) => now[field][name] !== old[field][name] && (typeof now[field][name] !== 'string' || /[:/]/.test(now[field][name])));
+      const elsewhere = is.filter((name) => now[field][name] !== old[field][name] && ![old[field][name], now[field][name]].every(isRegistryRange));
       if (elsewhere.length) return `points ${field} ${elsewhere.join(', ')} away from the npm registry`;
     } else if (JSON.stringify(old[field]) !== JSON.stringify(now[field])) {
       return `changes ${field}`;
@@ -97,6 +104,10 @@ function parseObject(text) {
   }
 }
 
+function isRegistryRange(value) {
+  return typeof value === 'string' && !/[:/]/.test(value);
+}
+
 function isObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
@@ -106,17 +117,56 @@ function findReleaseVersion(files) {
   return lock?.patch?.match(/^\+\s*releaseVersion:\s*(\S+)\s*$/m)?.[1] ?? null;
 }
 
+export function releaseVersionIn(genLock) {
+  return genLock.match(/^\s*releaseVersion:\s*(\S+)\s*$/m)?.[1] ?? null;
+}
+
 export function isVersionBumpTo(patch, releaseVersion) {
+  return isBumpPatch(patch, releaseVersion, () => false);
+}
+
+const DEPENDENCY_LINES = {
+  pyproject: [
+    /^(\s*")([A-Za-z0-9][\w.-]*(?:\[[^\]]+\])?)(\s*\(?)([<>=!~][^")]*?)(\)?",?\s*)$/,
+  ],
+  gradle: [
+    /^(\s*(?:api|implementation|testImplementation|compileOnly|runtimeOnly|testRuntimeOnly|annotationProcessor)\s*\(?\s*['"])([^:'"\s]+:[^:'"\s]+)(:)([^'"]+)(['"]\s*\)?\s*)$/,
+    /^(\s*id\s*\(?\s*['"])([^'"]+)(['"]\s*\)?\s+version\s+['"])([^'"]+)(['"]\s*)$/,
+  ],
+  gomod: [
+    /^(\s*(?:require\s+)?)([a-z0-9][\w.~-]*\/[\w.~/-]*)(\s+)(v\d\S*)(\s*(?:\/\/\s*indirect)?\s*)$/,
+    /^(\s*)(go|toolchain)(\s+)(\S+)(\s*)$/,
+  ],
+  csproj: [
+    /^(\s*<PackageReference\s+Include=")([^"]+)("\s+Version=")([^"]+)("\s*\/>\s*)$/,
+  ],
+};
+const REGISTRY_VERSION = /^(?=.*\d)[\s<>=!~^*|,.\w+-]+$/;
+
+export function isDependencyBump(was, is, format) {
+  return (DEPENDENCY_LINES[format] ?? []).some((pattern) => {
+    const before = was.match(pattern);
+    const after = is.match(pattern);
+    if (!before || !after || after[2] === 'version') return false;
+    return [1, 2, 3, 5].every((i) => before[i] === after[i]) && REGISTRY_VERSION.test(before[4]) && REGISTRY_VERSION.test(after[4]);
+  });
+}
+
+function isVersionLineBump(was, is, releaseVersion) {
+  if (!releaseVersion || !VERSION_LINE.test(is)) return false;
+  if (was.replace(VERSION, '<v>') !== is.replace(VERSION, '<v>')) return false;
+  const versions = is.match(VERSION) ?? [];
+  return versions.length > 0 && versions.every((v) => v === releaseVersion);
+}
+
+function isBumpPatch(patch, releaseVersion, otherwiseAllowed) {
   const removed = [];
   const added = [];
   let pairs = 0;
   const flush = () => {
     if (removed.length !== added.length) return false;
     for (let i = 0; i < removed.length; i++) {
-      if (!VERSION_LINE.test(added[i])) return false;
-      if (removed[i].replace(VERSION, '<v>') !== added[i].replace(VERSION, '<v>')) return false;
-      const versions = added[i].match(VERSION) ?? [];
-      if (versions.length === 0 || versions.some((v) => v !== releaseVersion)) return false;
+      if (!isVersionLineBump(removed[i], added[i], releaseVersion) && !otherwiseAllowed(removed[i], added[i])) return false;
       pairs++;
     }
     removed.length = 0;

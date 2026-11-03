@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { evaluate, isVersionBumpTo, checkManifest } from '../guard/guard.mjs';
+import { evaluate, isVersionBumpTo, checkManifest, isDependencyBump } from '../guard/guard.mjs';
 import { matchesAny } from '../guard/glob.mjs';
 
 const SDKS = ['typescript', 'python', 'java', 'go', 'php', 'csharp'];
@@ -78,7 +78,7 @@ test('workflow, test, hook and .genignore paths are blocked even inside src', ()
     ['python', 'tests/test_auth.py'],
     ['go', 'models/components/foo_test.go'],
     ['csharp', '.speakeasy/scripts/patch_update_models.py'],
-    ['java', 'build.gradle'],
+    ['java', 'settings.gradle'],
   ]) {
     const { reasons } = evaluate(withFile(load(sdk), { filename: path, status: 'modified', patch: '-a\n+b' }));
     assert.ok(reasons.includes(`${path}: blocked path`), `${sdk} ${path}`);
@@ -178,4 +178,64 @@ test('a version-only file may only change its version line', () => {
 test('python: a regenerated poetry.lock merges unattended', () => {
   const input = withFile(load('python'), { filename: 'poetry.lock', status: 'modified', patch: '@@ -1 +1 @@\n-old\n+new' });
   assert.deepEqual(evaluate(input), { ok: true, reasons: [] });
+});
+
+test('each SDK may bump an existing dependency to another registry version', () => {
+  for (const [format, was, is] of [
+    ['pyproject', '    "httpx >=0.28.1",', '    "httpx >=0.29.0",'],
+    ['pyproject', '    "PyJWT (>=2.10.1,<3.0.0)",', '    "PyJWT (>=2.11.0,<3.0.0)",'],
+    ['gradle', "    implementation 'com.auth0:java-jwt:4.5.0'", "    implementation 'com.auth0:java-jwt:4.6.0'"],
+    ['gradle', "    id 'cl.franciscosolis.sonatype-central-upload' version '1.0.3'", "    id 'cl.franciscosolis.sonatype-central-upload' version '1.0.4'"],
+    ['gomod', '\tgithub.com/google/uuid v1.6.0', '\tgithub.com/google/uuid v1.7.0'],
+    ['gomod', 'go 1.26.8', 'go 1.26.9'],
+    ['csproj', '    <PackageReference Include="nodatime" Version="3.1.9" />', '    <PackageReference Include="nodatime" Version="3.2.0" />'],
+  ]) {
+    assert.equal(isDependencyBump(was, is, format), true, `${format}: ${is}`);
+  }
+});
+
+test('a dependency line that swaps the package, its source or anything else goes to a human', () => {
+  for (const [format, was, is] of [
+    ['pyproject', '    "httpx >=0.28.1",', '    "evil-httpx >=0.28.1",'],
+    ['pyproject', '    "httpx >=0.28.1",', '    "httpx @ git+https://evil.example/httpx",'],
+    ['pyproject', '    "httpx @ git+https://evil.example/httpx",', '    "httpx >=0.29.0",'],
+    ['pyproject', 'build-backend = "poetry.core.masonry.api"', 'build-backend = "evil.backend"'],
+    ['pyproject', 'requires-python = ">=3.10"', 'requires-python = ">=3.11"'],
+    ['pyproject', 'pytest = "^9.0.3"', 'pytest = "^9.1.0"'],
+    ['pyproject', '    "foo 1.0",', '    "foo 2.0",'],
+    ['gomod', 'retract v1.6.0', 'retract v1.7.0'],
+    ['pyproject', 'version = "2.4.27"', 'version = "9.9.9"'],
+    ['gradle', "    implementation 'com.auth0:java-jwt:4.5.0'", "    implementation 'com.evil:java-jwt:4.5.0'"],
+    ['gradle', "    implementation 'com.auth0:java-jwt:4.5.0'", "    implementation files('/tmp/evil.jar')"],
+    ['gomod', '\tgithub.com/google/uuid v1.6.0', '\tgithub.com/evil/uuid v1.6.0'],
+    ['gomod', '\tgithub.com/google/uuid v1.6.0', '\tgithub.com/google/uuid => ../uuid'],
+    ['csproj', '    <PackageReference Include="nodatime" Version="3.1.9" />', '    <PackageReference Include="evil" Version="3.1.9" />'],
+  ]) {
+    assert.equal(isDependencyBump(was, is, format), false, `${format}: ${is}`);
+  }
+});
+
+test('python: a pyproject.toml dependency bump merges, an added dependency does not', () => {
+  const bump = '@@ -11,3 +11,3 @@\n     "httpcore >=1.0.9",\n-    "httpx >=0.28.1",\n+    "httpx >=0.29.0",\n     "jsonpath-python >=1.0.6",';
+  const input = load('python');
+  const files = input.files.map((f) => (f.filename === 'pyproject.toml' ? { ...f, patch: `${f.patch}\n${bump}` } : f));
+  assert.deepEqual(evaluate({ ...input, files }), { ok: true, reasons: [] });
+  const added = '@@ -11,2 +11,3 @@\n     "httpcore >=1.0.9",\n+    "left-pad >=1.0.0",\n     "httpx >=0.28.1",';
+  const withAdd = input.files.map((f) => (f.filename === 'pyproject.toml' ? { ...f, patch: `${f.patch}\n${added}` } : f));
+  assert.equal(evaluate({ ...input, files: withAdd }).ok, false);
+});
+
+test('php: composer.json dependency fields are require and require-dev', () => {
+  const pkg = (require) => JSON.stringify({ name: 'gr4vy/gr4vy-php', require, 'require-dev': { 'phpunit/phpunit': '^11.5.50' } });
+  assert.equal(checkManifest({ before: pkg({ 'guzzlehttp/guzzle': '^7.15.2' }), after: pkg({ 'guzzlehttp/guzzle': '^7.16.0' }) }, '1.7.35', ['require', 'require-dev']), null);
+  assert.equal(checkManifest({ before: pkg({ 'guzzlehttp/guzzle': '^7.15.2' }), after: pkg({ 'guzzlehttp/guzzle': '^7.15.2', 'evil/pkg': '^1.0' }) }, '1.7.35', ['require', 'require-dev']), 'adds require evil/pkg');
+  assert.equal(checkManifest({ before: pkg({ 'evil/pkg': 'git+https://evil.example/x' }), after: pkg({ 'evil/pkg': '^1.0' }) }, '1.7.35', ['require', 'require-dev']), 'points require evil/pkg away from the npm registry');
+});
+
+test('python: a gen.lock too large for GitHub to diff is checked against the release version read from the file', () => {
+  const input = load('python');
+  const files = input.files.map((f) => (f.filename === '.speakeasy/gen.lock' ? { ...f, patch: undefined } : f));
+  assert.equal(evaluate({ ...input, files }).ok, false);
+  assert.deepEqual(evaluate({ ...input, files, releaseVersion: '2.4.27' }), { ok: true, reasons: [] });
+  assert.equal(evaluate({ ...input, files, releaseVersion: null }).ok, false);
 });

@@ -19,8 +19,13 @@
     "poetry.lock"
   ],
   "versionOnly": [
-    ".speakeasy/gen.yaml",
-    "pyproject.toml"
+    ".speakeasy/gen.yaml"
+  ],
+  "dependencyFiles": [
+    {
+      "path": "pyproject.toml",
+      "format": "pyproject"
+    }
   ],
   "blocked": [
     ".github/**",
