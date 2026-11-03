@@ -1,0 +1,37 @@
+{
+  "allowed": [
+    "src/main/**",
+    "docs/**",
+    "README.md",
+    "RELEASES.md",
+    "USAGE.md",
+    ".speakeasy/gen.lock",
+    ".speakeasy/workflow.lock"
+  ],
+  "versionOnly": [
+    ".speakeasy/gen.yaml",
+    "gradle.properties"
+  ],
+  "dependencyFiles": [
+    {
+      "path": "build.gradle",
+      "format": "gradle"
+    }
+  ],
+  "blocked": [
+    ".github/**",
+    ".speakeasy/workflow.yaml",
+    ".speakeasy/overlays/**",
+    ".genignore",
+    ".gitattributes",
+    "src/main/java/org/openapis/openapi/hooks/**",
+    "src/test/**",
+    "integration-tests/**",
+    "build-extras.gradle",
+    "settings-extra.gradle",
+    "gradle/**",
+    "gradlew",
+    "gradlew.bat",
+    "settings.gradle"
+  ]
+}

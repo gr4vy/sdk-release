@@ -1,0 +1,84 @@
+{
+  "pr": {
+    "number": 61,
+    "state": "closed",
+    "draft": false,
+    "commits": 1,
+    "changed_files": 7,
+    "title": "chore: \ud83d\udc1d Update SDK - Generate SDK 0.30.0",
+    "user": {
+      "login": "gr4vy-sdk-generate[bot]"
+    },
+    "labels": [],
+    "head": {
+      "ref": "speakeasy-sdk-regen-1784628404",
+      "sha": "167d0bd3001b977e0ad8de77d40645f988eec18b",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-java-connectors"
+      }
+    },
+    "base": {
+      "ref": "main",
+      "sha": "a8e5877858f3035d149ec7006ebbd093570dffac",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-java-connectors"
+      }
+    }
+  },
+  "commits": [
+    {
+      "sha": "167d0bd3001b977e0ad8de77d40645f988eec18b",
+      "author": {
+        "login": "speakeasybot"
+      },
+      "committer": {
+        "login": "speakeasybot"
+      }
+    }
+  ],
+  "files": [
+    {
+      "filename": ".speakeasy/gen.lock",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -1,18 +1,18 @@\n lockVersion: 2.0.0\n id: 24d89612-faba-47e1-bde9-194f2d77376b\n management:\n-  docChecksum: bcc19504ef05b46d7a72c9bfffd0e526\n-  docVersion: 0.277.0\n-  speakeasyVersion: 1.790.1\n-  generationVersion: 2.918.1\n-  releaseVersion: 0.29.0\n-  configChecksum: 5be1accdb7364f01549aa6a566856e21\n+  docChecksum: edabd0f9c96cb7881d0ab2062c5010de\n+  docVersion: 0.278.0\n+  speakeasyVersion: 1.790.3\n+  generationVersion: 2.918.4\n+  releaseVersion: 0.30.0\n+  configChecksum: f6e3e352ba9ade424e84bc1ca13abb34\n   repoURL: https://github.com/gr4vy/gr4vy-java-connectors.git\n   installationURL: https://github.com/gr4vy/gr4vy-java-connectors\n persistentEdits:\n-  generation_id: 72a254c1-3226-47e5-9a2e-ab307223b264\n-  pristine_commit_hash: ea496ab508867e9616e7904d6153239d22f194af\n-  pristine_tree_hash: 53ea81b35e0c3866642bbad247154d91cd536b14\n+  generation_id: 435037e9-b113-4f0e-9bb3-479a3d9c7bd0\n+  pristine_commit_hash: e703813c88a977edef73aca70e261415bbd08997\n+  pristine_tree_hash: 6bff63e0060e3b9a9d044dd920d4122e2707579a\n features:\n   java:\n     additionalDependencies: 0.1.0\n@@ -809,8 +809,8 @@ trackedFiles:\n     pristine_git_object: 971eac94f44ae53d22cb40b328a7fe53bc9c9289\n   gradle.properties:\n     id: 2afbb999f001\n-    last_write_checksum: sha1:486d6cc80ad03a2dd40b12fba694f075b0131609\n-    pristine_git_object: 3377e402ffa18290e2df62b8cee00031ee6cff79\n+    last_write_checksum: sha1:3191821af3099095e08851c67c20ff3dfec1a5d5\n+    pristine_git_object: ee60eebddb45c8a80f7d70916096c88efb473c9c\n   gradle/wrapper/gradle-wrapper.jar:\n     id: ec27dae6e852\n     last_write_checksum: sha1:f725fb1467084142d74fd7cd8eab691ab3442611\n@@ -901,8 +901,8 @@ trackedFiles:\n     pristine_git_object: 96f4a44874fa1e29d6ec3ff35fb97ec22c91c98a\n   src/main/java/org/openapis/openapi/SDKConfiguration.java:\n     id: 0b994d6164f8\n-    last_write_checksum: sha1:83194cceda58fee84578ed9ed7aab7e4c76ddebe\n-    pristine_git_object: 37c7aff12c3a5a0ba139eaae4045f48db33c5f6f\n+    last_write_checksum: sha1:79340770ec09189910446e9bcc3567463e79b960\n+    pristine_git_object: b7c54eef43693360a0df1b32999faf02d02c696a\n   src/main/java/org/openapis/openapi/SecuritySource.java:\n     id: a2592d2c5a7a\n     last_write_checksum: sha1:bd494cc8f77e7c0582bae60e95ce48ed4e715935"
+    },
+    {
+      "filename": ".speakeasy/gen.yaml",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -31,7 +31,7 @@ generation:\n     generateNewTests: false\n     skipResponseBodyAssertions: false\n java:\n-  version: 0.29.0\n+  version: 0.30.0\n   additionalDependencies:\n     - testImplementation:org.junit.jupiter:junit-jupiter:5.10.0\n     - implementation:org.slf4j:slf4j-simple:2.0.7"
+    },
+    {
+      "filename": ".speakeasy/workflow.lock",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -1,20 +1,20 @@\n-speakeasyVersion: 1.790.1\n+speakeasyVersion: 1.790.3\n sources:\n     openapi:\n         sourceNamespace: connectors\n-        sourceRevisionDigest: sha256:2dbb3f4ba140cf7eee6aca99bded8cac3360e26144a30432f7388bb146128d46\n-        sourceBlobDigest: sha256:cf118a232cedffc196f703e25376af0c373f63fa468bb5d9b2120fd273d27103\n+        sourceRevisionDigest: sha256:c5603996a12e489b132c556e800d9c5c46592ef5149367bfb7a9c1556e43b05e\n+        sourceBlobDigest: sha256:64342a0ea8ffd7ff7281b6a25d2b8317fb88d19e356d98b7684b98a55efd05f5\n         tags:\n             - latest\n-            - 0.277.0\n+            - 0.278.0\n targets:\n     java:\n         source: openapi\n         sourceNamespace: connectors\n-        sourceRevisionDigest: sha256:2dbb3f4ba140cf7eee6aca99bded8cac3360e26144a30432f7388bb146128d46\n-        sourceBlobDigest: sha256:cf118a232cedffc196f703e25376af0c373f63fa468bb5d9b2120fd273d27103\n+        sourceRevisionDigest: sha256:c5603996a12e489b132c556e800d9c5c46592ef5149367bfb7a9c1556e43b05e\n+        sourceBlobDigest: sha256:64342a0ea8ffd7ff7281b6a25d2b8317fb88d19e356d98b7684b98a55efd05f5\n         codeSamplesNamespace: connectors-java-code-samples\n-        codeSamplesRevisionDigest: sha256:b7e19713cf1342c05fdc23b592e93666885e7481309a21421a2b99a009c4b4d9\n+        codeSamplesRevisionDigest: sha256:e5f86a1b9039a504be6fb38e552fff98c48618f0dc601449430e9b52dd703544\n workflow:\n     workflowVersion: 1.0.0\n     speakeasyVersion: latest"
+    },
+    {
+      "filename": "README.md",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -37,15 +37,15 @@ The samples below show how a published SDK artifact is used:\n \n Gradle:\n ```groovy\n-implementation 'com.gr4vy:connectors-sdk:0.29.0'\n+implementation 'com.gr4vy:connectors-sdk:0.30.0'\n ```\n \n Maven:\n ```xml\n <dependency>\n     <groupId>com.gr4vy</groupId>\n     <artifactId>connectors-sdk</artifactId>\n-    <version>0.29.0</version>\n+    <version>0.30.0</version>\n </dependency>\n ```\n "
+    },
+    {
+      "filename": "RELEASES.md",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -262,4 +262,12 @@ Based on:\n - OpenAPI Doc  \n - Speakeasy CLI 1.790.1 (2.918.1) https://github.com/speakeasy-api/speakeasy\n ### Generated\n-- [java v0.29.0] .\n\\ No newline at end of file\n+- [java v0.29.0] .\n+\n+## 2026-07-21 10:06:25\n+### Changes\n+Based on:\n+- OpenAPI Doc  \n+- Speakeasy CLI 1.790.3 (2.918.4) https://github.com/speakeasy-api/speakeasy\n+### Generated\n+- [java v0.30.0] .\n\\ No newline at end of file"
+    },
+    {
+      "filename": "gradle.properties",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -1,4 +1,4 @@\n groupId=com.gr4vy\n artifactId=connectors-sdk\n-version=0.29.0\n+version=0.30.0\n org.gradle.jvmargs=-Xmx4g -XX:MaxMetaspaceSize=1g"
+    },
+    {
+      "filename": "src/main/java/org/openapis/openapi/SDKConfiguration.java",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -17,9 +17,9 @@\n public class SDKConfiguration {\n \n     private static final String LANGUAGE = \"java\";\n-    public static final String OPENAPI_DOC_VERSION = \"0.277.0\";\n-    public static final String SDK_VERSION = \"0.29.0\";\n-    public static final String GEN_VERSION = \"2.918.1\";\n+    public static final String OPENAPI_DOC_VERSION = \"0.278.0\";\n+    public static final String SDK_VERSION = \"0.30.0\";\n+    public static final String GEN_VERSION = \"2.918.4\";\n     private static final String BASE_PACKAGE = \"org.openapis.openapi\";\n     public static final String USER_AGENT = \n             String.format(\"speakeasy-sdk/%s %s %s %s %s\","
+    }
+  ],
+  "genignore": []
+}
