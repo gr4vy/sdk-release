@@ -3,7 +3,7 @@ import { matchesAny } from './glob.mjs';
 const VERSION = /\d+(?:\.\d+)+(?:-[0-9A-Za-z.-]+)?/g;
 const VERSION_LINE = /^\s*(?:"version"\s*:|version\s*[:=]|<Version>)/i;
 
-export function evaluate({ pr, run, commits, files, config, genignore = [], manifests = {} }) {
+export function evaluate({ pr, run, commits, files, config, genignore = [], manifests = {}, releaseVersion = findReleaseVersion(files) }) {
   const reasons = [];
   const fail = (msg) => reasons.push(msg);
 
@@ -32,7 +32,6 @@ export function evaluate({ pr, run, commits, files, config, genignore = [], mani
   }
 
   if (files.length !== pr.changed_files) fail(`could only read ${files.length} of ${pr.changed_files} changed files`);
-  const releaseVersion = findReleaseVersion(files);
   const blocked = [...config.blocked, ...genignore];
   for (const f of files) {
     const paths = f.previous_filename ? [f.previous_filename, f.filename] : [f.filename];
@@ -87,7 +86,7 @@ export function checkManifest({ before, after }, releaseVersion, dependencyField
       const removed = was.filter((name) => !is.includes(name));
       if (added.length) return `adds ${field} ${added.join(', ')}`;
       if (removed.length) return `removes ${field} ${removed.join(', ')}`;
-      const elsewhere = is.filter((name) => now[field][name] !== old[field][name] && (typeof now[field][name] !== 'string' || /[:/]/.test(now[field][name])));
+      const elsewhere = is.filter((name) => now[field][name] !== old[field][name] && ![old[field][name], now[field][name]].every(isRegistryRange));
       if (elsewhere.length) return `points ${field} ${elsewhere.join(', ')} away from the npm registry`;
     } else if (JSON.stringify(old[field]) !== JSON.stringify(now[field])) {
       return `changes ${field}`;
@@ -105,6 +104,10 @@ function parseObject(text) {
   }
 }
 
+function isRegistryRange(value) {
+  return typeof value === 'string' && !/[:/]/.test(value);
+}
+
 function isObject(value) {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
@@ -114,6 +117,10 @@ function findReleaseVersion(files) {
   return lock?.patch?.match(/^\+\s*releaseVersion:\s*(\S+)\s*$/m)?.[1] ?? null;
 }
 
+export function releaseVersionIn(genLock) {
+  return genLock.match(/^\s*releaseVersion:\s*(\S+)\s*$/m)?.[1] ?? null;
+}
+
 export function isVersionBumpTo(patch, releaseVersion) {
   return isBumpPatch(patch, releaseVersion, () => false);
 }
@@ -121,7 +128,6 @@ export function isVersionBumpTo(patch, releaseVersion) {
 const DEPENDENCY_LINES = {
   pyproject: [
     /^(\s*")([A-Za-z0-9][\w.-]*(?:\[[^\]]+\])?)(\s*\(?)([^")]+?)(\)?",?\s*)$/,
-    /^(\s*)([A-Za-z0-9][\w.-]*)(\s*=\s*")([^"]+)("\s*)$/,
   ],
   gradle: [
     /^(\s*(?:api|implementation|testImplementation|compileOnly|runtimeOnly|testRuntimeOnly|annotationProcessor)\s*\(?\s*['"])([^:'"\s]+:[^:'"\s]+)(:)([^'"]+)(['"]\s*\)?\s*)$/,
@@ -142,7 +148,7 @@ export function isDependencyBump(was, is, format) {
     const before = was.match(pattern);
     const after = is.match(pattern);
     if (!before || !after || after[2] === 'version') return false;
-    return [1, 2, 3, 5].every((i) => before[i] === after[i]) && REGISTRY_VERSION.test(after[4]);
+    return [1, 2, 3, 5].every((i) => before[i] === after[i]) && REGISTRY_VERSION.test(before[4]) && REGISTRY_VERSION.test(after[4]);
   });
 }
 

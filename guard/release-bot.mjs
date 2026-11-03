@@ -1,6 +1,6 @@
 import { readFileSync, appendFileSync } from 'node:fs';
 import { client } from './github.mjs';
-import { evaluate } from './guard.mjs';
+import { evaluate, releaseVersionIn } from './guard.mjs';
 
 const MARKER = '<!-- release-bot -->';
 const LABEL = 'needs-human';
@@ -32,7 +32,11 @@ const manifests = await readManifests(files).catch((err) => {
   console.log(`Could not read the manifests (${err.message}); falling back to the version-only check.`);
   return {};
 });
-const { ok, reasons } = evaluate({ pr, run, commits, files, config, genignore, manifests });
+const releaseVersion = await readReleaseVersion(files).catch((err) => {
+  console.log(`Could not read .speakeasy/gen.lock (${err.message}).`);
+  return null;
+});
+const { ok, reasons } = evaluate({ pr, run, commits, files, config, genignore, manifests, releaseVersion });
 
 if (ok) {
   console.log(`#${pr.number} passes every rule; approving and merging ${pr.head.sha}.`);
@@ -56,12 +60,25 @@ if (ok) {
   output({ verdict: 'human', pr: pr.number, notify: String(!alreadyFlagged) });
 }
 
+async function readReleaseVersion(files) {
+  const lock = files.find((f) => f.filename === '.speakeasy/gen.lock');
+  if (lock?.status !== 'modified' || lock.patch != null) return undefined;
+  const [before, after] = await Promise.all([readText(lock.filename, await mergeBase()), readText(lock.filename, pr.head.sha)]);
+  const releaseVersion = releaseVersionIn(after);
+  return releaseVersion !== releaseVersionIn(before) ? releaseVersion : null;
+}
+
+async function mergeBase() {
+  const { merge_base_commit: base } = await gh.get(`/repos/${repo}/compare/${pr.base.sha}...${pr.head.sha}`);
+  return base.sha;
+}
+
 async function readManifests(files) {
   const changed = files.filter((f) => f.status === 'modified' && config.manifests?.includes(f.filename));
   if (!changed.length) return {};
-  const { merge_base_commit: base } = await gh.get(`/repos/${repo}/compare/${pr.base.sha}...${pr.head.sha}`);
+  const base = await mergeBase();
   const entries = await Promise.all(changed.map(async (f) => [f.filename, {
-    before: await readText(f.filename, base.sha),
+    before: await readText(f.filename, base),
     after: await readText(f.filename, pr.head.sha),
   }]));
   return Object.fromEntries(entries);
