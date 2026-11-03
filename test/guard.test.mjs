@@ -6,8 +6,8 @@ import { matchesAny } from '../guard/glob.mjs';
 
 const SDKS = ['typescript', 'python', 'java', 'go', 'php', 'csharp'];
 
-function load(sdk) {
-  const fx = JSON.parse(readFileSync(new URL(`fixtures/${sdk}.json`, import.meta.url)));
+function load(sdk, fixture = sdk) {
+  const fx = JSON.parse(readFileSync(new URL(`fixtures/${fixture}.json`, import.meta.url)));
   const config = JSON.parse(readFileSync(new URL(`../config/${sdk}.json`, import.meta.url)));
   const pr = { ...fx.pr, state: 'open' };
   const run = { head_sha: pr.head.sha, event: 'pull_request', conclusion: 'success', actor: { login: config.pushActors[0] } };
@@ -46,6 +46,13 @@ test('typescript: only gr4vy-sdk-generate may open and push a Speakeasy PR', () 
   }
   const { reasons } = evaluate({ ...input, pr: { ...input.pr, user: { login: 'github-actions[bot]' } } });
   assert.deepEqual(reasons, ['PR opened by github-actions[bot], not gr4vy-sdk-generate[bot]']);
+});
+
+test('typescript: a real App PR that adds a gen.yaml setting goes to a human for that alone', () => {
+  assert.deepEqual(evaluate(load('typescript', 'typescript-new-gen-flag')), {
+    ok: false,
+    reasons: ['.speakeasy/gen.yaml: changes more than the version (2.4.38)'],
+  });
 });
 
 test('a CI result for an older commit is not trusted', () => {
