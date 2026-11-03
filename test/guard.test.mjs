@@ -37,7 +37,7 @@ test('a push by anyone but Speakeasy goes to a human', () => {
   assert.match(reasons[0], /latest push was by mallory/);
 });
 
-for (const sdk of ['typescript', 'python']) test(`${sdk}: only gr4vy-sdk-generate may open and push a Speakeasy PR`, () => {
+for (const sdk of ['typescript', 'python', 'go']) test(`${sdk}: only gr4vy-sdk-generate may open and push a Speakeasy PR`, () => {
   const input = load(sdk);
   assert.deepEqual(input.config.pushActors, ['gr4vy-sdk-generate[bot]']);
   for (const login of ['speakeasy-github[bot]', 'github-actions[bot]']) {
