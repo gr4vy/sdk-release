@@ -74,6 +74,8 @@ export function checkManifest({ before, after }, releaseVersion) {
       const removed = was.filter((name) => !is.includes(name));
       if (added.length) return `adds ${field} ${added.join(', ')}`;
       if (removed.length) return `removes ${field} ${removed.join(', ')}`;
+      const elsewhere = is.filter((name) => now[field][name] !== old[field][name] && /[:/]/.test(now[field][name]));
+      if (elsewhere.length) return `points ${field} ${elsewhere.join(', ')} away from the npm registry`;
     } else if (JSON.stringify(old[field]) !== JSON.stringify(now[field])) {
       return `changes ${field}`;
     }
