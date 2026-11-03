@@ -62,25 +62,42 @@ function checkFile(f, paths, { config, blocked, releaseVersion, manifests }) {
 const DEPENDENCY_FIELDS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
 
 export function checkManifest({ before, after }, releaseVersion) {
-  const old = JSON.parse(before);
-  const now = JSON.parse(after);
+  const old = parseObject(before);
+  const now = parseObject(after);
+  if (!old || !now) return 'is not a JSON object';
   for (const field of new Set([...Object.keys(old), ...Object.keys(now)])) {
     if (field === 'version') {
-      if (old.version !== now.version && now.version !== releaseVersion) return `sets version ${now.version}, not ${releaseVersion}`;
+      if (old.version === now.version) continue;
+      if (!releaseVersion) return 'no new releaseVersion in .speakeasy/gen.lock to check the bump against';
+      if (now.version !== releaseVersion) return `sets version ${now.version}, not ${releaseVersion}`;
     } else if (DEPENDENCY_FIELDS.includes(field)) {
+      if (![old[field], now[field]].every((deps) => deps === undefined || isObject(deps))) return `has a malformed ${field}`;
       const was = Object.keys(old[field] ?? {});
       const is = Object.keys(now[field] ?? {});
       const added = is.filter((name) => !was.includes(name));
       const removed = was.filter((name) => !is.includes(name));
       if (added.length) return `adds ${field} ${added.join(', ')}`;
       if (removed.length) return `removes ${field} ${removed.join(', ')}`;
-      const elsewhere = is.filter((name) => now[field][name] !== old[field][name] && /[:/]/.test(now[field][name]));
+      const elsewhere = is.filter((name) => now[field][name] !== old[field][name] && (typeof now[field][name] !== 'string' || /[:/]/.test(now[field][name])));
       if (elsewhere.length) return `points ${field} ${elsewhere.join(', ')} away from the npm registry`;
     } else if (JSON.stringify(old[field]) !== JSON.stringify(now[field])) {
       return `changes ${field}`;
     }
   }
   return null;
+}
+
+function parseObject(text) {
+  try {
+    const value = JSON.parse(text);
+    return isObject(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function isObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
 function findReleaseVersion(files) {

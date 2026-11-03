@@ -149,9 +149,16 @@ test('a manifest that adds, removes or rewires anything goes to a human', () => 
   assert.equal(checkManifest({ before: pkg(), after: pkg({ devDependencies: {} }) }, '2.4.40'), 'removes devDependencies vitest');
   assert.equal(checkManifest({ before: pkg(), after: pkg({ scripts: { build: 'tsc', postinstall: 'node x.js' } }) }, '2.4.40'), 'changes scripts');
   assert.equal(checkManifest({ before: pkg(), after: pkg({ version: '9.9.9' }) }, '2.4.40'), 'sets version 9.9.9, not 2.4.40');
-  for (const zod of ['npm:evil@1.0.0', 'github:evil/zod', 'file:../zod', 'https://evil.example/zod.tgz']) {
+  for (const zod of ['npm:evil@1.0.0', 'github:evil/zod', 'file:../zod', 'https://evil.example/zod.tgz', null, 42]) {
     assert.equal(checkManifest({ before: pkg(), after: pkg({ dependencies: { zod } }) }, '2.4.40'), 'points dependencies zod away from the npm registry');
   }
+});
+
+test('a malformed manifest, or a version change with nothing to check it against, goes to a human', () => {
+  assert.equal(checkManifest({ before: pkg(), after: '{ not json' }, '2.4.40'), 'is not a JSON object');
+  assert.equal(checkManifest({ before: pkg(), after: '[]' }, '2.4.40'), 'is not a JSON object');
+  assert.equal(checkManifest({ before: pkg(), after: pkg({ dependencies: ['zod'] }) }, '2.4.40'), 'has a malformed dependencies');
+  assert.equal(checkManifest({ before: pkg(), after: pkg({ version: null }) }, null), 'no new releaseVersion in .speakeasy/gen.lock to check the bump against');
 });
 
 test('typescript: a dependency bump in package.json merges when its contents are read', () => {

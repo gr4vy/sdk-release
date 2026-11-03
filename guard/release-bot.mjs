@@ -28,7 +28,10 @@ const [commits, files, genignore] = await Promise.all([
   gh.paginate(`/repos/${repo}/pulls/${pr.number}/files`),
   readGenignore(pr.base.sha),
 ]);
-const manifests = await readManifests(files);
+const manifests = await readManifests(files).catch((err) => {
+  console.log(`Could not read the manifests (${err.message}); falling back to the version-only check.`);
+  return {};
+});
 const { ok, reasons } = evaluate({ pr, run, commits, files, config, genignore, manifests });
 
 if (ok) {
