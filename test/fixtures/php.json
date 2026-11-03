@@ -3,11 +3,11 @@
     "number": 306,
     "state": "closed",
     "draft": false,
-    "commits": 2,
+    "commits": 1,
     "changed_files": 9,
-    "title": "chore: 🐝 Update SDK - Generate SDK 1.7.33",
+    "title": "chore: \ud83d\udc1d Update SDK - Generate SDK 1.7.33",
     "user": {
-      "login": "github-actions[bot]"
+      "login": "gr4vy-sdk-generate[bot]"
     },
     "labels": [],
     "head": {
@@ -30,15 +30,6 @@
       "sha": "3d8d81551a64df17d81b029d562bbd14982c2583",
       "author": {
         "login": "speakeasybot"
-      },
-      "committer": {
-        "login": "speakeasybot"
-      }
-    },
-    {
-      "sha": "67d0641a9f2bef746e9c25290d9453094abdd582",
-      "author": {
-        "login": "speakeasy-github[bot]"
       },
       "committer": {
         "login": "speakeasybot"
