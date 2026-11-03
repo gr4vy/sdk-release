@@ -127,14 +127,14 @@ export function isVersionBumpTo(patch, releaseVersion) {
 
 const DEPENDENCY_LINES = {
   pyproject: [
-    /^(\s*")([A-Za-z0-9][\w.-]*(?:\[[^\]]+\])?)(\s*\(?)([^")]+?)(\)?",?\s*)$/,
+    /^(\s*")([A-Za-z0-9][\w.-]*(?:\[[^\]]+\])?)(\s*\(?)([<>=!~][^")]*?)(\)?",?\s*)$/,
   ],
   gradle: [
     /^(\s*(?:api|implementation|testImplementation|compileOnly|runtimeOnly|testRuntimeOnly|annotationProcessor)\s*\(?\s*['"])([^:'"\s]+:[^:'"\s]+)(:)([^'"]+)(['"]\s*\)?\s*)$/,
     /^(\s*id\s*\(?\s*['"])([^'"]+)(['"]\s*\)?\s+version\s+['"])([^'"]+)(['"]\s*)$/,
   ],
   gomod: [
-    /^(\s*(?:require\s+)?)([a-z0-9][\w.~/-]*)(\s+)(v\d\S*)(\s*(?:\/\/\s*indirect)?\s*)$/,
+    /^(\s*(?:require\s+)?)([a-z0-9][\w.~-]*\/[\w.~/-]*)(\s+)(v\d\S*)(\s*(?:\/\/\s*indirect)?\s*)$/,
     /^(\s*)(go|toolchain)(\s+)(\S+)(\s*)$/,
   ],
   csproj: [

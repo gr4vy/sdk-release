@@ -202,6 +202,8 @@ test('a dependency line that swaps the package, its source or anything else goes
     ['pyproject', 'build-backend = "poetry.core.masonry.api"', 'build-backend = "evil.backend"'],
     ['pyproject', 'requires-python = ">=3.10"', 'requires-python = ">=3.11"'],
     ['pyproject', 'pytest = "^9.0.3"', 'pytest = "^9.1.0"'],
+    ['pyproject', '    "foo 1.0",', '    "foo 2.0",'],
+    ['gomod', 'retract v1.6.0', 'retract v1.7.0'],
     ['pyproject', 'version = "2.4.27"', 'version = "9.9.9"'],
     ['gradle', "    implementation 'com.auth0:java-jwt:4.5.0'", "    implementation 'com.evil:java-jwt:4.5.0'"],
     ['gradle', "    implementation 'com.auth0:java-jwt:4.5.0'", "    implementation files('/tmp/evil.jar')"],
