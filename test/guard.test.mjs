@@ -96,6 +96,7 @@ test('workflow, test, hook and .genignore paths are blocked even inside src', ()
     ['java', 'settings.gradle'],
     ['java-connectors', 'integration-tests/build.gradle'],
     ['java-connectors', 'build-extras.gradle'],
+    ['java-connectors', 'src/main/java/org/openapis/openapi/hooks/SDKHooks.java'],
   ]) {
     const { reasons } = evaluate(withFile(load(sdk), { filename: path, status: 'modified', patch: '-a\n+b' }));
     assert.ok(reasons.includes(`${path}: blocked path`), `${sdk} ${path}`);
