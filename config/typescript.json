@@ -17,15 +17,17 @@
     "RELEASES.md",
     "USAGE.md",
     ".speakeasy/gen.lock",
-    ".speakeasy/workflow.lock"
+    ".speakeasy/workflow.lock",
+    "package-lock.json",
+    "examples/package-lock.json"
+  ],
+  "manifests": [
+    "package.json",
+    "examples/package.json"
   ],
   "versionOnly": [
     ".speakeasy/gen.yaml",
-    "package.json",
-    "package-lock.json",
-    "jsr.json",
-    "examples/package.json",
-    "examples/package-lock.json"
+    "jsr.json"
   ],
   "blocked": [
     ".github/**",

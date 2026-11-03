@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { evaluate, isVersionBumpTo } from '../guard/guard.mjs';
+import { evaluate, isVersionBumpTo, checkManifest } from '../guard/guard.mjs';
 import { matchesAny } from '../guard/glob.mjs';
 
 const SDKS = ['typescript', 'python', 'java', 'go', 'php', 'csharp'];
@@ -128,4 +128,32 @@ test('glob semantics', () => {
   assert.ok(matchesAny('x/y/a_test.go', ['**/*_test.go']));
   assert.ok(!matchesAny('internal/a.go', ['*.go']));
   assert.ok(!matchesAny('srcx/a.ts', ['src/**']));
+});
+
+const pkg = (over = {}) => JSON.stringify({
+  name: '@gr4vy/sdk',
+  version: '2.4.39',
+  scripts: { build: 'tsc' },
+  dependencies: { zod: '^4.6.6' },
+  devDependencies: { vitest: '^4.1.11' },
+  ...over,
+});
+
+test('a manifest may bump the version and existing dependency ranges', () => {
+  const after = pkg({ version: '2.4.40', dependencies: { zod: '^3.25.0 || ^4.0.0' }, devDependencies: { vitest: '^4.1.12' } });
+  assert.equal(checkManifest({ before: pkg(), after }, '2.4.40'), null);
+});
+
+test('a manifest that adds, removes or rewires anything goes to a human', () => {
+  assert.equal(checkManifest({ before: pkg(), after: pkg({ dependencies: { zod: '^4.6.6', 'left-pad': '^1.0.0' } }) }, '2.4.40'), 'adds dependencies left-pad');
+  assert.equal(checkManifest({ before: pkg(), after: pkg({ devDependencies: {} }) }, '2.4.40'), 'removes devDependencies vitest');
+  assert.equal(checkManifest({ before: pkg(), after: pkg({ scripts: { build: 'tsc', postinstall: 'node x.js' } }) }, '2.4.40'), 'changes scripts');
+  assert.equal(checkManifest({ before: pkg(), after: pkg({ version: '9.9.9' }) }, '2.4.40'), 'sets version 9.9.9, not 2.4.40');
+});
+
+test('typescript: a dependency bump in package.json merges when its contents are read', () => {
+  const input = load('typescript');
+  const before = pkg({ version: '2.4.36', dependencies: { zod: '^4.6.6' } });
+  const after = pkg({ version: '2.4.37', dependencies: { zod: '^3.25.0 || ^4.0.0' } });
+  assert.deepEqual(evaluate({ ...input, manifests: { 'package.json': { before, after } } }), { ok: true, reasons: [] });
 });
