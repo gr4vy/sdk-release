@@ -2,7 +2,7 @@ import { matchesAny } from './glob.mjs';
 
 const VERSION = /\d+(?:\.\d+)+(?:-[0-9A-Za-z.-]+)?/g;
 
-export function evaluate({ pr, run, commits, files, config, genignore = [] }) {
+export function evaluate({ pr, run, commits, files, config, genignore = [], manifests = {} }) {
   const reasons = [];
   const fail = (msg) => reasons.push(msg);
 
@@ -35,16 +35,21 @@ export function evaluate({ pr, run, commits, files, config, genignore = [] }) {
   const blocked = [...config.blocked, ...genignore];
   for (const f of files) {
     const paths = f.previous_filename ? [f.previous_filename, f.filename] : [f.filename];
-    const reason = checkFile(f, paths, { config, blocked, releaseVersion });
+    const reason = checkFile(f, paths, { config, blocked, releaseVersion, manifests });
     if (reason) fail(`${f.filename}: ${reason}`);
   }
 
   return { ok: reasons.length === 0, reasons };
 }
 
-function checkFile(f, paths, { config, blocked, releaseVersion }) {
+function checkFile(f, paths, { config, blocked, releaseVersion, manifests }) {
   if (paths.some((p) => matchesAny(p, blocked))) return 'blocked path';
-  if (paths.some((p) => matchesAny(p, config.versionOnly))) {
+  const manifest = config.manifests?.includes(f.filename);
+  if (manifest && manifests[f.filename]) {
+    if (f.status !== 'modified') return `${f.status}, only dependency and version bumps are allowed`;
+    return checkManifest(manifests[f.filename], releaseVersion);
+  }
+  if (manifest || paths.some((p) => matchesAny(p, config.versionOnly))) {
     if (f.status !== 'modified') return `${f.status}, only version bumps are allowed`;
     if (!releaseVersion) return 'no new releaseVersion in .speakeasy/gen.lock to check the bump against';
     if (f.patch == null) return 'diff too large to check';
@@ -52,6 +57,47 @@ function checkFile(f, paths, { config, blocked, releaseVersion }) {
   }
   if (paths.every((p) => matchesAny(p, config.allowed))) return null;
   return 'not a generated path';
+}
+
+const DEPENDENCY_FIELDS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
+
+export function checkManifest({ before, after }, releaseVersion) {
+  const old = parseObject(before);
+  const now = parseObject(after);
+  if (!old || !now) return 'is not a JSON object';
+  for (const field of new Set([...Object.keys(old), ...Object.keys(now)])) {
+    if (field === 'version') {
+      if (old.version === now.version) continue;
+      if (!releaseVersion) return 'no new releaseVersion in .speakeasy/gen.lock to check the bump against';
+      if (now.version !== releaseVersion) return `sets version ${now.version}, not ${releaseVersion}`;
+    } else if (DEPENDENCY_FIELDS.includes(field)) {
+      if (![old[field], now[field]].every((deps) => deps === undefined || isObject(deps))) return `has a malformed ${field}`;
+      const was = Object.keys(old[field] ?? {});
+      const is = Object.keys(now[field] ?? {});
+      const added = is.filter((name) => !was.includes(name));
+      const removed = was.filter((name) => !is.includes(name));
+      if (added.length) return `adds ${field} ${added.join(', ')}`;
+      if (removed.length) return `removes ${field} ${removed.join(', ')}`;
+      const elsewhere = is.filter((name) => now[field][name] !== old[field][name] && (typeof now[field][name] !== 'string' || /[:/]/.test(now[field][name])));
+      if (elsewhere.length) return `points ${field} ${elsewhere.join(', ')} away from the npm registry`;
+    } else if (JSON.stringify(old[field]) !== JSON.stringify(now[field])) {
+      return `changes ${field}`;
+    }
+  }
+  return null;
+}
+
+function parseObject(text) {
+  try {
+    const value = JSON.parse(text);
+    return isObject(value) ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+function isObject(value) {
+  return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
 function findReleaseVersion(files) {

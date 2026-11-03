@@ -28,7 +28,11 @@ const [commits, files, genignore] = await Promise.all([
   gh.paginate(`/repos/${repo}/pulls/${pr.number}/files`),
   readGenignore(pr.base.sha),
 ]);
-const { ok, reasons } = evaluate({ pr, run, commits, files, config, genignore });
+const manifests = await readManifests(files).catch((err) => {
+  console.log(`Could not read the manifests (${err.message}); falling back to the version-only check.`);
+  return {};
+});
+const { ok, reasons } = evaluate({ pr, run, commits, files, config, genignore, manifests });
 
 if (ok) {
   console.log(`#${pr.number} passes every rule; approving and merging ${pr.head.sha}.`);
@@ -50,6 +54,22 @@ if (ok) {
   await gh.post(`/repos/${repo}/issues/${pr.number}/labels`, { labels: [LABEL] });
   await upsertComment(pr.number, reasons);
   output({ verdict: 'human', pr: pr.number, notify: String(!alreadyFlagged) });
+}
+
+async function readManifests(files) {
+  const changed = files.filter((f) => f.status === 'modified' && config.manifests?.includes(f.filename));
+  if (!changed.length) return {};
+  const { merge_base_commit: base } = await gh.get(`/repos/${repo}/compare/${pr.base.sha}...${pr.head.sha}`);
+  const entries = await Promise.all(changed.map(async (f) => [f.filename, {
+    before: await readText(f.filename, base.sha),
+    after: await readText(f.filename, pr.head.sha),
+  }]));
+  return Object.fromEntries(entries);
+}
+
+async function readText(path, ref) {
+  const file = await gh.get(`/repos/${repo}/contents/${path}?ref=${ref}`);
+  return Buffer.from(file.content, 'base64').toString('utf8');
 }
 
 async function readGenignore(ref) {

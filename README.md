@@ -14,6 +14,7 @@ A PR merges unattended only when all of these hold:
 - Every commit is attributed to Speakeasy.
 - Every changed file is a generated path (`allowed`), and none is `blocked` or listed in the repo's `.genignore`. Blocked always wins.
 - `versionOnly` files change nothing except version numbers, and only to the new `releaseVersion`.
+- `manifests` (such as `package.json`) may change only `version`, to the new `releaseVersion`, and the version ranges of dependencies already listed. Adding or removing a dependency, or changing any other field such as `scripts`, goes to a human. Lockfiles are treated as generated output.
 
 To change a list, open a PR here, then bump the pinned SHA in the SDK repo. The bump touches `.github/`, so it always needs a human.
 
