@@ -32,6 +32,19 @@ test('csharp: the tri-state patch commit sends the PR to a human', () => {
   assert.deepEqual(reasons, [reasons.find((r) => /^commit \w+ by github-actions\[bot\]$/.test(r))]);
 });
 
+test('csharp: the tri-state patch merges when the generate App commits it', () => {
+  const input = load('csharp');
+  const app = { login: 'gr4vy-sdk-generate[bot]' };
+  const commits = input.commits.map((c) => (c.author.login === 'github-actions[bot]' ? { ...c, author: app, committer: app } : c));
+  assert.deepEqual(evaluate({ ...input, commits }), { ok: true, reasons: [] });
+});
+
+test('only C# trusts commits from the generate App', () => {
+  for (const sdk of SDKS.filter((s) => s !== 'csharp')) {
+    assert.ok(!load(sdk).config.commitAuthors.includes('gr4vy-sdk-generate[bot]'), sdk);
+  }
+});
+
 test('a push by anyone but Speakeasy goes to a human', () => {
   const input = load('typescript');
   const { ok, reasons } = evaluate({ ...input, run: { ...input.run, actor: { login: 'mallory' } } });

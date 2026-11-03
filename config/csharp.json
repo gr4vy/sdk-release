@@ -1,4 +1,8 @@
 {
+  "commitAuthors": [
+    "speakeasybot",
+    "gr4vy-sdk-generate[bot]"
+  ],
   "allowed": [
     "src/Gr4vy/**",
     "NUGET.md",
