@@ -22,6 +22,12 @@
     ".speakeasy/gen.yaml",
     "gradle.properties"
   ],
+  "dependencyFiles": [
+    {
+      "path": "build.gradle",
+      "format": "gradle"
+    }
+  ],
   "blocked": [
     ".github/**",
     ".speakeasy/workflow.yaml",
@@ -35,6 +41,6 @@
     "gradle/**",
     "gradlew",
     "gradlew.bat",
-    "*.gradle"
+    "settings.gradle"
   ]
 }
