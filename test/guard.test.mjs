@@ -6,7 +6,6 @@ import { matchesAny } from '../guard/glob.mjs';
 
 const SDKS = ['typescript', 'python', 'java', 'go', 'php', 'csharp'];
 
-// Fixtures are real merged Speakeasy PRs, reopened for the test.
 function load(sdk) {
   const fx = JSON.parse(readFileSync(new URL(`fixtures/${sdk}.json`, import.meta.url)));
   const config = JSON.parse(readFileSync(new URL(`../config/${sdk}.json`, import.meta.url)));

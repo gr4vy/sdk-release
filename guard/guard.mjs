@@ -2,8 +2,6 @@ import { matchesAny } from './glob.mjs';
 
 const VERSION = /\d+(?:\.\d+)+(?:-[0-9A-Za-z.-]+)?/g;
 
-// Returns { ok, reasons }. ok is true only when every rule passes; reasons
-// lists every rule that failed, so a human sees the full picture at once.
 export function evaluate({ pr, run, commits, files, config, genignore = [] }) {
   const reasons = [];
   const fail = (msg) => reasons.push(msg);
@@ -61,8 +59,6 @@ function findReleaseVersion(files) {
   return lock?.patch?.match(/^\+\s*releaseVersion:\s*(\S+)\s*$/m)?.[1] ?? null;
 }
 
-// True when every changed line is paired with one that differs only in
-// version numbers, and every new version number is the SDK's own release.
 export function isVersionBumpTo(patch, releaseVersion) {
   const removed = [];
   const added = [];
