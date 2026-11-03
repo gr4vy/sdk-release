@@ -12,7 +12,7 @@ export async function decide(gh, { repo, headSha, bot }) {
     publish: true,
     version,
     mode: unattended.ok ? 'auto' : 'manual',
-    why: unattended.ok ? `every change since the last release was merged by ${bot}` : unattended.why,
+    why: unattended.ok ? `every change since the last release was merged by ${bot} or came from Dependabot` : unattended.why,
   };
 }
 
@@ -33,9 +33,13 @@ async function allBotMerged(gh, { repo, headSha, bot }) {
     const merged = prs.find((p) => p.merge_commit_sha === c.sha);
     if (!merged) return { ok: false, why: `${c.sha.slice(0, 7)} was pushed to main without a PR` };
     const pr = await gh.get(`/repos/${repo}/pulls/${merged.number}`);
-    if (pr.merged_by?.login !== bot) return { ok: false, why: `#${pr.number} was merged by ${pr.merged_by?.login ?? 'unknown'}` };
+    if (pr.merged_by?.login !== bot && !fromDependabot(pr, repo)) return { ok: false, why: `#${pr.number} was merged by ${pr.merged_by?.login ?? 'unknown'}` };
   }
   return { ok: true };
+}
+
+function fromDependabot(pr, repo) {
+  return pr.user?.login === 'dependabot[bot]' && pr.head?.ref?.startsWith('dependabot/') && pr.head?.repo?.full_name === repo;
 }
 
 async function exists(gh, path) {
