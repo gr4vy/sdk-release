@@ -1,6 +1,6 @@
 # sdk-release
 
-Shared release tooling for the six Gr4vy server-side SDKs. Each SDK repo pins these actions by commit SHA.
+Shared release tooling for the six Gr4vy server-side SDKs and the Java connectors SDK. Each SDK repo pins these actions by commit SHA.
 
 - `release-bot/`: runs after a PR's CI goes green. If the PR is a Speakeasy regeneration that passes the guard in `config/<sdk>.json` (on top of the shared `config/defaults.json`), the gr4vy-sdk-release App approves and merges it. Otherwise it labels the PR `needs-human` and says why.
 - `publish-gate/`: runs after the live tests pass on `main`. It publishes when `.speakeasy/gen.lock` carries an untagged version. If every change since the last release was merged by the gr4vy-sdk-release App or came from a Dependabot PR, it publishes unattended. A Dependabot PR counts only when it was opened by `dependabot[bot]` from a `dependabot/` branch in the same repo, which the SDK repos lock to Dependabot's own pushes. Otherwise a human approves it in the `release-manual` Environment.

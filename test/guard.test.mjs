@@ -6,7 +6,7 @@ import { evaluate, isVersionBumpTo, checkManifest, isDependencyBump } from '../g
 import { matchesAny } from '../guard/glob.mjs';
 import { loadConfig } from '../guard/config.mjs';
 
-const SDKS = ['typescript', 'python', 'java', 'go', 'php', 'csharp'];
+const SDKS = ['typescript', 'python', 'java', 'go', 'php', 'csharp', 'java-connectors'];
 
 function load(sdk, fixture = sdk) {
   const fx = JSON.parse(readFileSync(new URL(`fixtures/${fixture}.json`, import.meta.url)));
@@ -94,6 +94,9 @@ test('workflow, test, hook and .genignore paths are blocked even inside src', ()
     ['go', 'models/components/foo_test.go'],
     ['csharp', '.speakeasy/scripts/patch_update_models.py'],
     ['java', 'settings.gradle'],
+    ['java-connectors', 'integration-tests/build.gradle'],
+    ['java-connectors', 'build-extras.gradle'],
+    ['java-connectors', 'src/main/java/org/openapis/openapi/hooks/SDKHooks.java'],
   ]) {
     const { reasons } = evaluate(withFile(load(sdk), { filename: path, status: 'modified', patch: '-a\n+b' }));
     assert.ok(reasons.includes(`${path}: blocked path`), `${sdk} ${path}`);
