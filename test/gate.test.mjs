@@ -16,7 +16,14 @@ function fakeGitHub({ main = HEAD, version = '2.4.38', tagged = false, latest = 
   if (latest) routes[`/repos/${REPO}/releases/latest`] = { tag_name: latest };
   for (const c of commits) {
     routes[`/repos/${REPO}/commits/${c.sha}/pulls`] = c.pr ? [{ number: c.pr, merge_commit_sha: c.sha }] : [];
-    if (c.pr) routes[`/repos/${REPO}/pulls/${c.pr}`] = { number: c.pr, merged_by: { login: c.mergedBy } };
+    if (c.pr) {
+      routes[`/repos/${REPO}/pulls/${c.pr}`] = {
+        number: c.pr,
+        merged_by: { login: c.mergedBy },
+        user: { login: c.author ?? 'cbetta' },
+        head: { ref: c.ref ?? 'feature', repo: { full_name: c.headRepo ?? REPO } },
+      };
+    }
   }
   return {
     get: async (path) => {
@@ -29,12 +36,26 @@ function fakeGitHub({ main = HEAD, version = '2.4.38', tagged = false, latest = 
 const run = (opts) => decide(fakeGitHub(opts), { repo: REPO, headSha: HEAD, bot: BOT });
 
 test('a version made only of bot merges publishes unattended', async () => {
-  assert.deepEqual(await run(), { publish: true, version: '2.4.38', mode: 'auto', why: `every change since the last release was merged by ${BOT}` });
+  assert.deepEqual(await run(), { publish: true, version: '2.4.38', mode: 'auto', why: `every change since the last release was merged by ${BOT} or came from Dependabot` });
 });
 
 test('a human merge since the last release needs approval', async () => {
   const commits = [{ sha: 'a'.repeat(40), pr: 370, mergedBy: 'cbetta' }, { sha: HEAD, pr: 371, mergedBy: BOT }];
   assert.deepEqual(await run({ commits }), { publish: true, version: '2.4.38', mode: 'manual', why: '#370 was merged by cbetta' });
+});
+
+test('a Dependabot PR merged by a human still publishes unattended', async () => {
+  const commits = [{ sha: 'a'.repeat(40), pr: 371, mergedBy: 'cbetta', author: 'dependabot[bot]', ref: 'dependabot/npm_and_yarn/zod-4.6.6' }, { sha: HEAD, pr: 372, mergedBy: BOT }];
+  assert.equal((await run({ commits })).mode, 'auto');
+});
+
+test('only a real Dependabot PR counts as Dependabot', async () => {
+  const dependabot = { sha: 'a'.repeat(40), pr: 371, mergedBy: 'cbetta', author: 'dependabot[bot]', ref: 'dependabot/npm_and_yarn/zod-4.6.6' };
+  for (const fake of [{ ...dependabot, author: 'mallory' }, { ...dependabot, ref: 'feature' }, { ...dependabot, headRepo: 'evil/gr4vy-typescript' }]) {
+    const { mode, why } = await run({ commits: [fake, { sha: HEAD, pr: 372, mergedBy: BOT }] });
+    assert.equal(mode, 'manual');
+    assert.equal(why, '#371 was merged by cbetta');
+  }
 });
 
 test('a direct push to main needs approval', async () => {

@@ -15,7 +15,7 @@ outputs:
     description: true when this commit carries an unreleased version.
     value: ${{ steps.gate.outputs.publish }}
   mode:
-    description: auto when every change since the last release was merged by the bot, otherwise manual.
+    description: auto when every change since the last release was merged by the bot or came from Dependabot, otherwise manual.
     value: ${{ steps.gate.outputs.mode }}
   version:
     value: ${{ steps.gate.outputs.version }}
