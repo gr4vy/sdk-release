@@ -3,11 +3,11 @@
     "number": 335,
     "state": "closed",
     "draft": false,
-    "commits": 2,
+    "commits": 1,
     "changed_files": 6,
     "title": "chore: 🐝 Update SDK - Generate SDK 2.4.27",
     "user": {
-      "login": "github-actions[bot]"
+      "login": "gr4vy-sdk-generate[bot]"
     },
     "labels": [],
     "head": {
@@ -30,15 +30,6 @@
       "sha": "c5c1c1b2ec1b97b8e20d7c4e8d107030e9513bd1",
       "author": {
         "login": "speakeasybot"
-      },
-      "committer": {
-        "login": "speakeasybot"
-      }
-    },
-    {
-      "sha": "3f3534e5c7bd0cf1d7d9bc2413539136e3951489",
-      "author": {
-        "login": "speakeasy-github[bot]"
       },
       "committer": {
         "login": "speakeasybot"
