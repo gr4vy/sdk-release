@@ -37,8 +37,8 @@ test('a push by anyone but Speakeasy goes to a human', () => {
   assert.match(reasons[0], /latest push was by mallory/);
 });
 
-test('typescript: only gr4vy-sdk-generate may open and push a Speakeasy PR', () => {
-  const input = load('typescript');
+for (const sdk of ['typescript', 'python']) test(`${sdk}: only gr4vy-sdk-generate may open and push a Speakeasy PR`, () => {
+  const input = load(sdk);
   assert.deepEqual(input.config.pushActors, ['gr4vy-sdk-generate[bot]']);
   for (const login of ['speakeasy-github[bot]', 'github-actions[bot]']) {
     const { reasons } = evaluate({ ...input, run: { ...input.run, actor: { login } } });
@@ -173,4 +173,9 @@ test('a version-only file may only change its version line', () => {
   assert.equal(isVersionBumpTo(bump('  "version": "2.4.39",', '  "version": "2.4.40",'), '2.4.40'), true);
   assert.equal(isVersionBumpTo(bump('    "zod": "^4.6.6"', '    "zod": "^2.4.40"'), '2.4.40'), false);
   assert.equal(isVersionBumpTo(bump('  foo: 1.2.3', '  foo: 2.4.40'), '2.4.40'), false);
+});
+
+test('python: a regenerated poetry.lock merges unattended', () => {
+  const input = withFile(load('python'), { filename: 'poetry.lock', status: 'modified', patch: '@@ -1 +1 @@\n-old\n+new' });
+  assert.deepEqual(evaluate(input), { ok: true, reasons: [] });
 });
