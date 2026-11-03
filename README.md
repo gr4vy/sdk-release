@@ -11,7 +11,7 @@ A PR merges unattended only when all of these hold:
 
 - It was opened by `prAuthor` (the gr4vy-sdk-generate App, in `config/defaults.json`) on a `speakeasy-sdk-regen-*` branch in the same repo, against `main`.
 - CI passed on the PR's head commit, and that push came from one of the config's `pushActors`.
-- Every commit is attributed to Speakeasy.
+- Every commit is attributed to one of `commitAuthors`: Speakeasy, plus for C# the gr4vy-sdk-generate App, which commits the tri-state patch in the same generation run.
 - Every changed file is a generated path (`allowed`), and none is `blocked` or listed in the repo's `.genignore`. Blocked always wins.
 - `versionOnly` files change nothing except version numbers, and only to the new `releaseVersion`.
 - `manifests` (such as `package.json`) may change only `version`, to the new `releaseVersion`, and the version ranges of dependencies already listed. Adding or removing a dependency, or changing any other field such as `scripts`, goes to a human. Lockfiles are treated as generated output.
