@@ -213,8 +213,10 @@ export function isDependencyBump(was, is, format) {
 export function isDowngrade(was, is) {
   const versions = (v) => [...String(v ?? '').matchAll(/(\d+(?:\.\d+)*)([0-9A-Za-z.-]*)/g)];
   const suffix = (m) => m[2].match(/\d+|[A-Za-z]+/g) ?? [];
+  const before = versions(was);
   const after = versions(is);
-  return versions(was).some((a, i) => after[i]
+  if (after.length < before.length) return true;
+  return before.some((a, i) => after[i]
     && (compareParts(a[1].split('.'), after[i][1].split('.'), '0') || compareParts(suffix(a), suffix(after[i]))) > 0);
 }
 
