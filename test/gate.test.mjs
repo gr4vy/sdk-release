@@ -6,10 +6,11 @@ const REPO = 'gr4vy/gr4vy-typescript';
 const BOT = 'gr4vy-sdk-release[bot]';
 const HEAD = 'c'.repeat(40);
 
-function fakeGitHub({ main = HEAD, version = '2.4.38', tagged = false, latest = 'v2.4.37', status = 'ahead', commits = [{ sha: HEAD, pr: 371, mergedBy: BOT }] } = {}) {
+function fakeGitHub({ main = HEAD, version = '2.4.38', manifestVersion, tagged = false, latest = 'v2.4.37', status = 'ahead', commits = [{ sha: HEAD, pr: 371, mergedBy: BOT }] } = {}) {
   const routes = {
     [`/repos/${REPO}/commits/main`]: { sha: main },
     [`/repos/${REPO}/contents/.speakeasy/gen.lock?ref=${HEAD}`]: { content: Buffer.from(`management:\n  releaseVersion: ${version}\n`).toString('base64') },
+    [`/repos/${REPO}/contents/.release-please-manifest.json?ref=${HEAD}`]: { content: Buffer.from(manifestVersion === null ? '{not json' : JSON.stringify({ '.': manifestVersion ?? version })).toString('base64') },
     [`/repos/${REPO}/compare/${latest}...${HEAD}`]: { status, total_commits: commits.length, commits: commits.map(({ sha }) => ({ sha })) },
   };
   if (tagged) routes[`/repos/${REPO}/git/ref/tags/v${version}`] = {};
@@ -75,4 +76,16 @@ test('an already released version does not publish again', async () => {
 
 test('a commit main has moved past does not publish', async () => {
   assert.equal((await run({ main: 'd'.repeat(40) })).publish, false);
+});
+
+test('release-please: the version comes from .release-please-manifest.json', async () => {
+  const decision = await decide(fakeGitHub({ version: '9.9.9', manifestVersion: '1.50.0' }), { repo: REPO, headSha: HEAD, bot: BOT, versionSource: 'release-please' });
+  assert.deepEqual(decision, { publish: true, version: '1.50.0', mode: 'auto', why: `every change since the last release was merged by ${BOT} or came from Dependabot` });
+});
+
+test('a version that is not X.Y.Z never publishes', async () => {
+  for (const manifestVersion of ['1.50.0\nmode=auto', '1.50.0-beta', 'latest', '', null]) {
+    const { publish } = await decide(fakeGitHub({ manifestVersion }), { repo: REPO, headSha: HEAD, bot: BOT, versionSource: 'release-please' });
+    assert.equal(publish, false, JSON.stringify(manifestVersion));
+  }
 });

@@ -1,10 +1,34 @@
-export async function decide(gh, { repo, headSha, bot }) {
+const VERSION_SOURCES = {
+  speakeasy: {
+    file: '.speakeasy/gen.lock',
+    read: (text) => text.match(/^\s*releaseVersion:\s*(\S+)\s*$/m)?.[1],
+    missing: 'no releaseVersion in .speakeasy/gen.lock',
+    valid: /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/,
+  },
+  'release-please': {
+    file: '.release-please-manifest.json',
+    read: (text) => {
+      try {
+        return JSON.parse(text)['.'];
+      } catch {
+        return undefined;
+      }
+    },
+    missing: 'no "." version in .release-please-manifest.json',
+    valid: /^\d+\.\d+\.\d+$/,
+  },
+};
+
+export async function decide(gh, { repo, headSha, bot, versionSource = 'speakeasy' }) {
+  const source = VERSION_SOURCES[versionSource];
+  if (!source) throw new Error(`unknown version source ${versionSource}`);
   const main = await gh.get(`/repos/${repo}/commits/main`);
   if (main.sha !== headSha) return { publish: false, why: `main has moved on to ${main.sha.slice(0, 7)}; its own run decides` };
 
-  const lock = await gh.get(`/repos/${repo}/contents/.speakeasy/gen.lock?ref=${headSha}`);
-  const version = Buffer.from(lock.content, 'base64').toString('utf8').match(/^\s*releaseVersion:\s*(\S+)\s*$/m)?.[1];
-  if (!version) return { publish: false, why: 'no releaseVersion in .speakeasy/gen.lock' };
+  const file = await gh.get(`/repos/${repo}/contents/${source.file}?ref=${headSha}`);
+  const version = source.read(Buffer.from(file.content, 'base64').toString('utf8'));
+  if (!version) return { publish: false, why: source.missing };
+  if (!source.valid.test(version)) return { publish: false, why: `${JSON.stringify(version)} is not a version` };
   if (await exists(gh, `/repos/${repo}/git/ref/tags/v${version}`)) return { publish: false, version, why: `v${version} is already released` };
 
   const unattended = await allBotMerged(gh, { repo, headSha, bot });
@@ -16,7 +40,7 @@ export async function decide(gh, { repo, headSha, bot }) {
   };
 }
 
-async function allBotMerged(gh, { repo, headSha, bot }) {
+export async function allBotMerged(gh, { repo, headSha, bot }) {
   let latest;
   try {
     latest = await gh.get(`/repos/${repo}/releases/latest`);

@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { evaluate, isVersionBumpTo, checkManifest, isDependencyBump } from '../guard/guard.mjs';
+import { evaluate, evaluateRelease, isVersionBumpTo, checkManifest, isDependencyBump } from '../guard/guard.mjs';
 import { matchesAny } from '../guard/glob.mjs';
 import { loadConfig } from '../guard/config.mjs';
 
@@ -256,4 +256,77 @@ test('python: a gen.lock too large for GitHub to diff is checked against the rel
   assert.equal(evaluate({ ...input, files }).ok, false);
   assert.deepEqual(evaluate({ ...input, files, releaseVersion: '2.4.27' }), { ok: true, reasons: [] });
   assert.equal(evaluate({ ...input, files, releaseVersion: null }).ok, false);
+});
+
+test('cli: a real regen PR merges unattended', () => {
+  assert.deepEqual(evaluate(load('cli')), { ok: true, reasons: [] });
+});
+
+test('cli: regenerated commands, docs, golden file and a Go version bump merge unattended', () => {
+  let input = load('cli');
+  for (const filename of ['internal/commands/generated/zz_generated_commands.go', 'internal/cli/testdata/command_tree.golden', 'docs/gr4vy_transactions_list.md']) {
+    input = withFile(input, { filename, status: 'modified', patch: '-a\n+b' });
+  }
+  const goMod = input.files.find((f) => f.filename === 'go.mod');
+  const files = input.files.map((f) => (f === goMod ? { ...f, patch: `@@ -1,3 +1,3 @@\n-go 1.26.8\n+go 1.26.10\n${goMod.patch}` } : f));
+  assert.deepEqual(evaluate({ ...input, files }), { ok: true, reasons: [] });
+});
+
+test('cli: the generator, tests and release config go to a human', () => {
+  for (const path of ['internal/commands/generated/zz_extra.go', 'internal/commands/generated/doc.go', 'internal/gen/emit.go', 'internal/cli/root.go', 'test/cli_e2e_test.go', 'internal/cli/tree_test.go', '.goreleaser.yaml', '.release-please-manifest.json', 'docs/README.md']) {
+    const { ok } = evaluate(withFile(load('cli'), { filename: path, status: 'modified', patch: '-a\n+b' }));
+    assert.equal(ok, false, path);
+  }
+});
+
+test('cli: a new Go dependency goes to a human', () => {
+  const input = load('cli');
+  const files = input.files.map((f) => (f.filename === 'go.mod' ? { ...f, patch: '@@ -5,2 +5,3 @@\n require (\n+\tgithub.com/evil/pkg v1.0.0\n \tgithub.com/gr4vy/gr4vy-go v1.14.9' } : f));
+  assert.match(evaluate({ ...input, files }).reasons[0], /^go.mod: changes more than versions/);
+});
+
+function loadRelease({ history = { ok: true }, before = '{\n  ".": "1.48.0"\n}\n', after = '{\n  ".": "1.49.0"\n}\n' } = {}) {
+  return { ...load('cli', 'cli-release'), manifest: { before, after }, history };
+}
+
+test('cli: a release PR for bot-only changes merges unattended', () => {
+  assert.deepEqual(evaluateRelease(loadRelease()), { ok: true, reasons: [] });
+});
+
+test('cli: a release PR goes to a human when a person merged anything since the last release', () => {
+  assert.deepEqual(evaluateRelease(loadRelease({ history: { ok: false, why: '#183 was merged by cbetta' } })), {
+    ok: false,
+    reasons: ['not every change since the last release came from a bot: #183 was merged by cbetta'],
+  });
+});
+
+test('cli: a release PR may only bump the version and add changelog entries', () => {
+  const cases = [
+    [{ after: '{\n  ".": "1.48.0",\n  "x": "1"\n}\n' }, '.release-please-manifest.json: changes x, not the "." version'],
+    [{ before: '{\n  ".": "1.48.0",\n  "other": "1.0.0"\n}\n', after: '{\n  ".": "1.48.0",\n  "other": "1.1.0"\n}\n' }, '.release-please-manifest.json: changes other, not the "." version'],
+    [{ after: '{\n  ".": "1.47.0"\n}\n' }, '.release-please-manifest.json: 1.48.0 to 1.47.0 is not a version bump'],
+    [{ after: '{\n  ".": "1.49.0-beta"\n}\n' }, '.release-please-manifest.json: 1.48.0 to 1.49.0-beta is not a version bump'],
+  ];
+  for (const [opts, reason] of cases) assert.deepEqual(evaluateRelease(loadRelease(opts)).reasons, [reason]);
+
+  const input = loadRelease();
+  const files = input.files.map((f) => (f.filename === 'CHANGELOG.md' ? { ...f, patch: `${f.patch}\n-## old entry` } : f));
+  assert.deepEqual(evaluateRelease({ ...input, files }).reasons, ['CHANGELOG.md: changes existing entries']);
+
+  const noChangelog = { ...input, pr: { ...input.pr, changed_files: 1 }, files: input.files.filter((f) => f.filename !== 'CHANGELOG.md') };
+  assert.deepEqual(evaluateRelease(noChangelog).reasons, ['CHANGELOG.md is unchanged']);
+
+  const extra = withFile(input, { filename: 'go.mod', status: 'modified', patch: '-a\n+b' });
+  assert.deepEqual(evaluateRelease(extra).reasons, ['go.mod: not a release file']);
+});
+
+test('cli: a release PR from anyone but the generate App goes to a human', () => {
+  const input = loadRelease();
+  const mallory = { login: 'mallory' };
+  const commits = input.commits.map((c) => ({ ...c, author: mallory, committer: mallory }));
+  assert.match(evaluateRelease({ ...input, commits }).reasons[0], /^commit \w+ by mallory$/);
+  const pr = { ...input.pr, user: mallory };
+  assert.ok(evaluateRelease({ ...input, pr }).reasons.includes('PR opened by mallory, not gr4vy-sdk-generate[bot]'));
+  const run = { ...input.run, actor: mallory };
+  assert.match(evaluateRelease({ ...input, run }).reasons[0], /^latest push was by mallory/);
 });
