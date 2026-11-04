@@ -383,8 +383,10 @@ test('a version with text that is not a version goes to a human', () => {
     ['pyproject', '    "httpx >=2.0,<1.0",', '    "httpx >=2.0,<x1.0",'],
     ['gradle', "    implementation 'com.auth0:java-jwt:4.5.0'", "    implementation 'com.auth0:java-jwt:5.+'"],
     ['gradle', "    implementation 'com.auth0:java-jwt:4.5.0'", "    implementation 'com.auth0:java-jwt:latest.release5'"],
+    ['gradle', "    implementation 'com.auth0:java-jwt:foo4.5.0'", "    implementation 'com.auth0:java-jwt:foo5.0.0'"],
   ]) {
     assert.equal(isDependencyBump(was, is, format), false, `${format}: ${is}`);
   }
   assert.equal(isDependencyBump('\tgithub.com/a/b v1.2.3', '\tgithub.com/a/b v1.2.4+incompatible', 'gomod'), true);
+  assert.equal(isDependencyBump('toolchain go1.22.0', 'toolchain go1.23.0', 'gomod'), true);
 });

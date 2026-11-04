@@ -198,7 +198,7 @@ const DEPENDENCY_LINES = {
   ],
 };
 const REGISTRY_VERSION = /^(?=.*\d)[\s<>=!~^*|,.\w+-]+$/;
-const operators = (version) => version.replace(/v?\d+(?:\.\d+)*(?:[-.]?[0-9A-Za-z]+)*(?:\+[0-9A-Za-z.-]+)?/g, '');
+const operators = (version) => version.replace(/(?<![0-9A-Za-z.+-])(?:v|go)?\d+(?:\.\d+)*[0-9A-Za-z]*(?:[-.][0-9A-Za-z]+)*(?:\+[0-9A-Za-z.-]+)?(?![0-9A-Za-z+-]|\.[0-9A-Za-z])/g, '');
 
 export function isDependencyBump(was, is, format) {
   return (DEPENDENCY_LINES[format] ?? []).some((pattern) => {
