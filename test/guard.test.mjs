@@ -365,7 +365,15 @@ test('version comparison', () => {
   assert.equal(isDowngrade('1.2.3-rc.2', '1.2.3-rc.1'), true);
   assert.equal(isDowngrade('1.2.3-rc.9', '1.2.3-rc.10'), false);
   assert.equal(isDowngrade('1.2.3', '1.2.3-rc.1'), true);
-  assert.equal(isDowngrade('1.2.3-rc.1', '1.2.3'), false);
+  assert.equal(isDowngrade('1.2.3-rc.1', '1.2.3'), true, 'a suffix that cannot be ordered goes to a human');
+  assert.equal(isDowngrade('>=0.28.1.post1', '>=0.28.1'), true);
+  assert.equal(isDowngrade('>=2.10.1,<3.0.0', '>=2.10.1,<2.0.0'), true);
+  assert.equal(isDowngrade('>=2.10.1,<3.0.0', '>=2.11.0,<3.0.0'), false);
   assert.equal(isDowngrade('>=2.0.0rc2', '>=2.0.0rc1'), true);
   assert.equal(isDowngrade('v0.0.0-20240101120000-abcdef123456', 'v0.0.0-20230101120000-fedcba654321'), true);
+});
+
+test('a range that loses a version goes to a human', () => {
+  assert.equal(isDowngrade('>=2.0,<3.0', '>=2.0,<'), true);
+  assert.equal(isDependencyBump('    "httpx >=0.28.1,<1.0",', '    "httpx >=0.28.1,<",', 'pyproject'), false);
 });
