@@ -313,6 +313,9 @@ test('cli: a release PR may only bump the version and add changelog entries', ()
   const files = input.files.map((f) => (f.filename === 'CHANGELOG.md' ? { ...f, patch: `${f.patch}\n-## old entry` } : f));
   assert.deepEqual(evaluateRelease({ ...input, files }).reasons, ['CHANGELOG.md: changes existing entries']);
 
+  const noChangelog = { ...input, pr: { ...input.pr, changed_files: 1 }, files: input.files.filter((f) => f.filename !== 'CHANGELOG.md') };
+  assert.deepEqual(evaluateRelease(noChangelog).reasons, ['CHANGELOG.md is unchanged']);
+
   const extra = withFile(input, { filename: 'go.mod', status: 'modified', patch: '-a\n+b' });
   assert.deepEqual(evaluateRelease(extra).reasons, ['go.mod: not a release file']);
 });

@@ -33,6 +33,7 @@ export function evaluateRelease({ pr, run, commits, files, config, manifest, his
     if (reason) fail(`${f.filename}: ${reason}`);
   }
   if (!files.some((f) => f.filename === release.manifest)) fail(`${release.manifest} is unchanged`);
+  if (!files.some((f) => f.filename === release.changelog)) fail(`${release.changelog} is unchanged`);
   if (!history.ok) fail(`not every change since the last release came from a bot: ${history.why}`);
 
   return { ok: reasons.length === 0, reasons };
