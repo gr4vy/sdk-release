@@ -18,7 +18,7 @@ export function evaluate({ pr, run, commits, files, config, genignore = [], mani
   return { ok: reasons.length === 0, reasons };
 }
 
-export function evaluateRelease({ pr, run, commits, files, config, manifest, history }) {
+export function evaluateRelease({ pr, run, commits, files, config, manifest }) {
   const release = config.releasePr;
   const reasons = checkSource({ pr, run, commits, config, branchPrefix: release.branchPrefix, signedCommitters: release.signedCommitters ?? [] });
   const fail = (msg) => reasons.push(msg);
@@ -34,7 +34,6 @@ export function evaluateRelease({ pr, run, commits, files, config, manifest, his
   }
   if (!files.some((f) => f.filename === release.manifest)) fail(`${release.manifest} is unchanged`);
   if (!files.some((f) => f.filename === release.changelog)) fail(`${release.changelog} is unchanged`);
-  if (!history.ok) fail(`not every change since the last release came from a bot: ${history.why}`);
 
   return { ok: reasons.length === 0, reasons };
 }

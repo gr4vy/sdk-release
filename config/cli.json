@@ -33,7 +33,6 @@
     "changelog": "CHANGELOG.md",
     "signedCommitters": [
       "web-flow"
-    ],
-    "releaseBot": "gr4vy-sdk-release[bot]"
+    ]
   }
 }

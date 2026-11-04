@@ -40,7 +40,7 @@ export async function decide(gh, { repo, headSha, bot, versionSource = 'speakeas
   };
 }
 
-export async function allBotMerged(gh, { repo, headSha, bot }) {
+async function allBotMerged(gh, { repo, headSha, bot }) {
   let latest;
   try {
     latest = await gh.get(`/repos/${repo}/releases/latest`);

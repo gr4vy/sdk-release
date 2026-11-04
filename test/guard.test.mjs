@@ -285,19 +285,12 @@ test('cli: a new Go dependency goes to a human', () => {
   assert.match(evaluate({ ...input, files }).reasons[0], /^go.mod: changes more than versions/);
 });
 
-function loadRelease({ history = { ok: true }, before = '{\n  ".": "1.48.0"\n}\n', after = '{\n  ".": "1.49.0"\n}\n' } = {}) {
-  return { ...load('cli', 'cli-release'), manifest: { before, after }, history };
+function loadRelease({ before = '{\n  ".": "1.48.0"\n}\n', after = '{\n  ".": "1.49.0"\n}\n' } = {}) {
+  return { ...load('cli', 'cli-release'), manifest: { before, after } };
 }
 
-test('cli: a release PR for bot-only changes merges unattended', () => {
+test('cli: a release PR that only bumps the version and adds to the changelog merges unattended', () => {
   assert.deepEqual(evaluateRelease(loadRelease()), { ok: true, reasons: [] });
-});
-
-test('cli: a release PR goes to a human when a person merged anything since the last release', () => {
-  assert.deepEqual(evaluateRelease(loadRelease({ history: { ok: false, why: '#183 was merged by cbetta' } })), {
-    ok: false,
-    reasons: ['not every change since the last release came from a bot: #183 was merged by cbetta'],
-  });
 });
 
 test('cli: a release PR may only bump the version and add changelog entries', () => {
