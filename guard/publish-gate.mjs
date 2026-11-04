@@ -6,6 +6,7 @@ const decision = await decide(client(process.env.GITHUB_TOKEN), {
   repo: process.env.GITHUB_REPOSITORY,
   headSha: process.env.HEAD_SHA,
   bot: process.env.BOT_LOGIN,
+  versionSource: process.env.VERSION_SOURCE,
 });
 console.log(`publish=${decision.publish} mode=${decision.mode ?? '-'}: ${decision.why}`);
 if (process.env.GITHUB_OUTPUT) {

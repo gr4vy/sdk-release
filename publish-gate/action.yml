@@ -7,6 +7,9 @@ inputs:
   bot-login:
     description: The release bot's login, e.g. gr4vy-sdk-release[bot].
     required: true
+  version-source:
+    description: Where the version lives, speakeasy (.speakeasy/gen.lock) or release-please (.release-please-manifest.json).
+    default: speakeasy
   token:
     description: A token that can read the repo.
     default: ${{ github.token }}
@@ -28,5 +31,6 @@ runs:
         GITHUB_TOKEN: ${{ inputs.token }}
         HEAD_SHA: ${{ inputs.head-sha }}
         BOT_LOGIN: ${{ inputs.bot-login }}
+        VERSION_SOURCE: ${{ inputs.version-source }}
         GATE: ${{ github.action_path }}/../guard/publish-gate.mjs
       run: node "$GATE"

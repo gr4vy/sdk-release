@@ -1,0 +1,36 @@
+{
+  "branchPrefix": "cli-regen",
+  "commitAuthors": [
+    "gr4vy-sdk-generate[bot]"
+  ],
+  "allowed": [
+    "internal/commands/generated/**",
+    "internal/cli/testdata/command_tree.golden",
+    "docs/gr4vy*.md",
+    "go.sum"
+  ],
+  "versionOnly": [],
+  "dependencyFiles": [
+    {
+      "path": "go.mod",
+      "format": "gomod"
+    }
+  ],
+  "blocked": [
+    ".github/**",
+    ".goreleaser.yaml",
+    "release-please-config.json",
+    ".release-please-manifest.json",
+    "internal/gen/**",
+    "internal/gendocs/**",
+    "scripts/**",
+    "test/**",
+    "**/*_test.go"
+  ],
+  "releasePr": {
+    "branchPrefix": "release-please--branches--main",
+    "manifest": ".release-please-manifest.json",
+    "changelog": "CHANGELOG.md",
+    "releaseBot": "gr4vy-sdk-release[bot]"
+  }
+}

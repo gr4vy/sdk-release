@@ -1,0 +1,54 @@
+{
+  "pr": {
+    "number": 181,
+    "state": "closed",
+    "draft": false,
+    "commits": 1,
+    "changed_files": 2,
+    "title": "feat: regenerate command surface from latest gr4vy-go",
+    "user": {
+      "login": "gr4vy-sdk-generate[bot]"
+    },
+    "labels": [],
+    "head": {
+      "ref": "cli-regen",
+      "sha": "6d5b74756a174fad518293e3a63940a3e1ee7a10",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-cli"
+      }
+    },
+    "base": {
+      "ref": "main",
+      "sha": "8d0b401e7e056fbef485a5cfe349089e71b762a7",
+      "repo": {
+        "full_name": "gr4vy/gr4vy-cli"
+      }
+    }
+  },
+  "commits": [
+    {
+      "sha": "6d5b74756a174fad518293e3a63940a3e1ee7a10",
+      "author": {
+        "login": "gr4vy-sdk-generate[bot]"
+      },
+      "committer": {
+        "login": "gr4vy-sdk-generate[bot]"
+      }
+    }
+  ],
+  "files": [
+    {
+      "filename": "go.mod",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -3,7 +3,7 @@ module github.com/gr4vy/gr4vy-cli\n go 1.26.8\n \n require (\n-\tgithub.com/gr4vy/gr4vy-go v1.14.8\n+\tgithub.com/gr4vy/gr4vy-go v1.14.9\n \tgithub.com/pelletier/go-toml/v2 v2.4.3\n \tgithub.com/spf13/cobra v1.10.2\n \tgithub.com/spf13/pflag v1.0.10"
+    },
+    {
+      "filename": "go.sum",
+      "status": "modified",
+      "previous_filename": null,
+      "patch": "@@ -13,8 +13,8 @@ github.com/google/go-cmp v0.6.0 h1:ofyhxvXcZhMsU5ulbFiLKl/XBFqE1GSq7atu8tAmTRI=\n github.com/google/go-cmp v0.6.0/go.mod h1:17dUlkBOakJ0+DkrSSNjCkIjxS6bF9zb3elmeNGIjoY=\n github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=\n github.com/google/uuid v1.6.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=\n-github.com/gr4vy/gr4vy-go v1.14.8 h1:9wVFah4sHL7ULlQoXRgDC1H/4sbyolOtv81UaKg3v7I=\n-github.com/gr4vy/gr4vy-go v1.14.8/go.mod h1:lguQFRgAJ5KuKuxns5uErOKOUOvXRklXxuxs8C2E3nc=\n+github.com/gr4vy/gr4vy-go v1.14.9 h1:EVJAIryZdQVKL6GSzJNm4VDc7Hi1+sCU7Ib3hSAAsow=\n+github.com/gr4vy/gr4vy-go v1.14.9/go.mod h1:lguQFRgAJ5KuKuxns5uErOKOUOvXRklXxuxs8C2E3nc=\n github.com/inconshreveable/mousetrap v1.1.0 h1:wN+x4NVGpMsO7ErUn/mUI3vEoE6Jt13X2s0bqwp9tc8=\n github.com/inconshreveable/mousetrap v1.1.0/go.mod h1:vpF70FUmC8bwa3OWnCshd2FqLfsEA9PFc4w1p2J65bw=\n github.com/pelletier/go-toml/v2 v2.4.3 h1:GTRvJQutkOSftxIFD5xw9aepkYNuPWmVJpffdDPYVpY="
+    }
+  ],
+  "genignore": []
+}

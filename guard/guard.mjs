@@ -4,6 +4,41 @@ const VERSION = /\d+(?:\.\d+)+(?:-[0-9A-Za-z.-]+)?/g;
 const VERSION_LINE = /^\s*(?:"version"\s*:|version\s*[:=]|<Version>)/i;
 
 export function evaluate({ pr, run, commits, files, config, genignore = [], manifests = {}, releaseVersion = findReleaseVersion(files) }) {
+  const reasons = checkSource({ pr, run, commits, config, branchPrefix: config.branchPrefix });
+  const fail = (msg) => reasons.push(msg);
+
+  if (files.length !== pr.changed_files) fail(`could only read ${files.length} of ${pr.changed_files} changed files`);
+  const blocked = [...config.blocked, ...genignore];
+  for (const f of files) {
+    const paths = f.previous_filename ? [f.previous_filename, f.filename] : [f.filename];
+    const reason = checkFile(f, paths, { config, blocked, releaseVersion, manifests });
+    if (reason) fail(`${f.filename}: ${reason}`);
+  }
+
+  return { ok: reasons.length === 0, reasons };
+}
+
+export function evaluateRelease({ pr, run, commits, files, config, manifest, history }) {
+  const release = config.releasePr;
+  const reasons = checkSource({ pr, run, commits, config, branchPrefix: release.branchPrefix });
+  const fail = (msg) => reasons.push(msg);
+
+  if (files.length !== pr.changed_files) fail(`could only read ${files.length} of ${pr.changed_files} changed files`);
+  for (const f of files) {
+    let reason;
+    if (f.previous_filename) reason = 'renamed';
+    else if (f.filename === release.manifest) reason = checkReleaseManifest(f, manifest);
+    else if (f.filename === release.changelog) reason = checkChangelog(f);
+    else reason = 'not a release file';
+    if (reason) fail(`${f.filename}: ${reason}`);
+  }
+  if (!files.some((f) => f.filename === release.manifest)) fail(`${release.manifest} is unchanged`);
+  if (!history.ok) fail(`not every change since the last release came from a bot: ${history.why}`);
+
+  return { ok: reasons.length === 0, reasons };
+}
+
+function checkSource({ pr, run, commits, config, branchPrefix }) {
   const reasons = [];
   const fail = (msg) => reasons.push(msg);
 
@@ -12,7 +47,7 @@ export function evaluate({ pr, run, commits, files, config, genignore = [], mani
   if (pr.head.repo?.full_name !== pr.base.repo.full_name) fail('PR comes from a fork');
   if (pr.base.ref !== config.baseBranch) fail(`PR targets ${pr.base.ref}, not ${config.baseBranch}`);
   if (pr.user.login !== config.prAuthor) fail(`PR opened by ${pr.user.login}, not ${config.prAuthor}`);
-  if (!pr.head.ref.startsWith(config.branchPrefix)) fail(`branch ${pr.head.ref} is not a ${config.branchPrefix}* branch`);
+  if (!pr.head.ref.startsWith(branchPrefix)) fail(`branch ${pr.head.ref} is not a ${branchPrefix}* branch`);
 
   if (run.head_sha !== pr.head.sha) fail('CI result is for an older commit than the PR head');
   if (run.event !== 'pull_request') fail(`CI ran on ${run.event}, not pull_request`);
@@ -30,16 +65,36 @@ export function evaluate({ pr, run, commits, files, config, genignore = [], mani
       }
     }
   }
+  return reasons;
+}
 
-  if (files.length !== pr.changed_files) fail(`could only read ${files.length} of ${pr.changed_files} changed files`);
-  const blocked = [...config.blocked, ...genignore];
-  for (const f of files) {
-    const paths = f.previous_filename ? [f.previous_filename, f.filename] : [f.filename];
-    const reason = checkFile(f, paths, { config, blocked, releaseVersion, manifests });
-    if (reason) fail(`${f.filename}: ${reason}`);
+function checkReleaseManifest(f, manifest) {
+  if (f.status !== 'modified') return `${f.status}, only a version bump is allowed`;
+  const before = manifest && parseObject(manifest.before);
+  const after = manifest && parseObject(manifest.after);
+  if (!before || !after) return 'could not read it as a JSON object';
+  const keys = [...new Set([...Object.keys(before), ...Object.keys(after)])];
+  const changed = keys.filter((k) => before[k] !== after[k]);
+  if (changed.length !== 1 || !(changed[0] in before) || !(changed[0] in after)) return `changes ${changed.join(', ') || 'nothing'}, not one version`;
+  return isNewerVersion(before[changed[0]], after[changed[0]]) ? null : `${before[changed[0]]} to ${after[changed[0]]} is not a version bump`;
+}
+
+function checkChangelog(f) {
+  if (f.status !== 'modified' && f.status !== 'added') return `${f.status}, only new entries are allowed`;
+  if (f.patch == null) return 'diff too large to check';
+  return f.patch.split('\n').some((line) => line.startsWith('-')) ? 'changes existing entries' : null;
+}
+
+const RELEASE = /^(\d+)\.(\d+)\.(\d+)$/;
+
+function isNewerVersion(was, is) {
+  const a = typeof was === 'string' && was.match(RELEASE);
+  const b = typeof is === 'string' && is.match(RELEASE);
+  if (!a || !b) return false;
+  for (let i = 1; i <= 3; i++) {
+    if (Number(b[i]) !== Number(a[i])) return Number(b[i]) > Number(a[i]);
   }
-
-  return { ok: reasons.length === 0, reasons };
+  return false;
 }
 
 function checkFile(f, paths, { config, blocked, releaseVersion, manifests }) {
