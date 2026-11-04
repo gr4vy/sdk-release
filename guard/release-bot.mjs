@@ -1,7 +1,6 @@
 import { appendFileSync } from 'node:fs';
 import { client } from './github.mjs';
 import { evaluate, evaluateRelease, releaseVersionIn } from './guard.mjs';
-import { allBotMerged } from './gate.mjs';
 import { loadConfig } from './config.mjs';
 
 const MARKER = '<!-- release-bot -->';
@@ -37,7 +36,7 @@ if (ok) {
   await gh.post(`/repos/${repo}/pulls/${pr.number}/reviews`, {
     commit_id: pr.head.sha,
     event: 'APPROVE',
-    body: releasePr ? 'Release PR for changes that all came from bots.' : 'Generated and within the path guards.',
+    body: releasePr ? 'Release PR that only bumps the version and adds to the changelog; the publish gate decides whether it needs approval.' : 'Generated and within the path guards.',
   });
   await gh.put(`/repos/${repo}/pulls/${pr.number}/merge`, {
     sha: pr.head.sha,
@@ -68,12 +67,10 @@ async function checkGeneratedPr() {
 }
 
 async function checkReleasePr() {
-  const { manifest: path, releaseBot } = config.releasePr;
-  const base = await mergeBase();
+  const { manifest: path } = config.releasePr;
   const changed = files.find((f) => f.filename === path && f.status === 'modified');
-  const manifest = changed && { before: await readText(path, base), after: await readText(path, pr.head.sha) };
-  const history = await allBotMerged(gh, { repo, headSha: base, bot: releaseBot });
-  return evaluateRelease({ pr, run, commits, files, config, manifest, history });
+  const manifest = changed && { before: await readText(path, await mergeBase()), after: await readText(path, pr.head.sha) };
+  return evaluateRelease({ pr, run, commits, files, config, manifest });
 }
 
 async function readReleaseVersion(files) {

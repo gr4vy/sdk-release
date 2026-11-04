@@ -285,19 +285,12 @@ test('cli: a new Go dependency goes to a human', () => {
   assert.match(evaluate({ ...input, files }).reasons[0], /^go.mod: changes more than versions/);
 });
 
-function loadRelease({ history = { ok: true }, before = '{\n  ".": "1.48.0"\n}\n', after = '{\n  ".": "1.49.0"\n}\n' } = {}) {
-  return { ...load('cli', 'cli-release'), manifest: { before, after }, history };
+function loadRelease({ before = '{\n  ".": "1.48.0"\n}\n', after = '{\n  ".": "1.49.0"\n}\n' } = {}) {
+  return { ...load('cli', 'cli-release'), manifest: { before, after } };
 }
 
-test('cli: a release PR for bot-only changes merges unattended', () => {
+test('cli: a release PR that only bumps the version and adds to the changelog merges unattended', () => {
   assert.deepEqual(evaluateRelease(loadRelease()), { ok: true, reasons: [] });
-});
-
-test('cli: a release PR goes to a human when a person merged anything since the last release', () => {
-  assert.deepEqual(evaluateRelease(loadRelease({ history: { ok: false, why: '#183 was merged by cbetta' } })), {
-    ok: false,
-    reasons: ['not every change since the last release came from a bot: #183 was merged by cbetta'],
-  });
 });
 
 test('cli: a release PR may only bump the version and add changelog entries', () => {
@@ -329,4 +322,20 @@ test('cli: a release PR from anyone but the generate App goes to a human', () =>
   assert.ok(evaluateRelease({ ...input, pr }).reasons.includes('PR opened by mallory, not gr4vy-sdk-generate[bot]'));
   const run = { ...input.run, actor: mallory };
   assert.match(evaluateRelease({ ...input, run }).reasons[0], /^latest push was by mallory/);
+});
+
+test('cli: a release PR commit made through the API (committer web-flow, signed by GitHub) merges', () => {
+  const input = loadRelease();
+  const viaApi = (verified, author = 'gr4vy-sdk-generate[bot]') => input.commits.map((c) => ({
+    ...c, author: { login: author }, committer: { login: 'web-flow' }, commit: { verification: { verified } },
+  }));
+  assert.deepEqual(evaluateRelease({ ...input, commits: viaApi(true) }), { ok: true, reasons: [] });
+  assert.match(evaluateRelease({ ...input, commits: viaApi(false) }).reasons[0], /^commit \w+ by web-flow$/);
+  assert.match(evaluateRelease({ ...input, commits: viaApi(true, 'mallory') }).reasons[0], /^commit \w+ by mallory$/);
+});
+
+test('web-flow commits never pass a regen PR', () => {
+  const input = load('cli');
+  const commits = input.commits.map((c) => ({ ...c, committer: { login: 'web-flow' }, commit: { verification: { verified: true } } }));
+  assert.match(evaluate({ ...input, commits }).reasons[0], /^commit \w+ by web-flow$/);
 });

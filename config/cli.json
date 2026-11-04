@@ -31,6 +31,8 @@
     "branchPrefix": "release-please--branches--main",
     "manifest": ".release-please-manifest.json",
     "changelog": "CHANGELOG.md",
-    "releaseBot": "gr4vy-sdk-release[bot]"
+    "signedCommitters": [
+      "web-flow"
+    ]
   }
 }
