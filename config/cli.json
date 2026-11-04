@@ -4,7 +4,7 @@
     "gr4vy-sdk-generate[bot]"
   ],
   "allowed": [
-    "internal/commands/generated/**",
+    "internal/commands/generated/zz_generated_commands.go",
     "internal/cli/testdata/command_tree.golden",
     "docs/gr4vy*.md",
     "go.sum"

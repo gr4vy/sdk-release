@@ -20,6 +20,7 @@ export async function decide(gh, { repo, headSha, bot, versionSource = 'speakeas
   const file = await gh.get(`/repos/${repo}/contents/${source.file}?ref=${headSha}`);
   const version = source.read(Buffer.from(file.content, 'base64').toString('utf8'));
   if (!version) return { publish: false, why: source.missing };
+  if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(version)) return { publish: false, why: `${JSON.stringify(version)} is not a version` };
   if (await exists(gh, `/repos/${repo}/git/ref/tags/v${version}`)) return { publish: false, version, why: `v${version} is already released` };
 
   const unattended = await allBotMerged(gh, { repo, headSha, bot });

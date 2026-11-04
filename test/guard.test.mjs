@@ -273,7 +273,7 @@ test('cli: regenerated commands, docs, golden file and a Go version bump merge u
 });
 
 test('cli: the generator, tests and release config go to a human', () => {
-  for (const path of ['internal/gen/emit.go', 'internal/cli/root.go', 'test/cli_e2e_test.go', 'internal/cli/tree_test.go', '.goreleaser.yaml', '.release-please-manifest.json', 'docs/README.md']) {
+  for (const path of ['internal/commands/generated/zz_extra.go', 'internal/commands/generated/doc.go', 'internal/gen/emit.go', 'internal/cli/root.go', 'test/cli_e2e_test.go', 'internal/cli/tree_test.go', '.goreleaser.yaml', '.release-please-manifest.json', 'docs/README.md']) {
     const { ok } = evaluate(withFile(load('cli'), { filename: path, status: 'modified', patch: '-a\n+b' }));
     assert.equal(ok, false, path);
   }

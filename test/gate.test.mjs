@@ -82,3 +82,10 @@ test('release-please: the version comes from .release-please-manifest.json', asy
   const decision = await decide(fakeGitHub({ version: '9.9.9', manifestVersion: '1.50.0' }), { repo: REPO, headSha: HEAD, bot: BOT, versionSource: 'release-please' });
   assert.deepEqual(decision, { publish: true, version: '1.50.0', mode: 'auto', why: `every change since the last release was merged by ${BOT} or came from Dependabot` });
 });
+
+test('a version that is not X.Y.Z never publishes', async () => {
+  for (const manifestVersion of ['1.50.0\nmode=auto', 'latest', '']) {
+    const { publish } = await decide(fakeGitHub({ manifestVersion }), { repo: REPO, headSha: HEAD, bot: BOT, versionSource: 'release-please' });
+    assert.equal(publish, false, JSON.stringify(manifestVersion));
+  }
+});
