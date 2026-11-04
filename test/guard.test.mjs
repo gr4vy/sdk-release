@@ -347,6 +347,8 @@ test('a dependency downgrade in a pinned dependency file goes to a human', () =>
     ['gomod', '\tgithub.com/google/uuid v1.7.0', '\tgithub.com/google/uuid v1.6.0'],
     ['gomod', 'go 1.26.10', 'go 1.26.8'],
     ['csproj', '    <PackageReference Include="nodatime" Version="3.2.0" />', '    <PackageReference Include="nodatime" Version="3.1.9" />'],
+    ['gomod', '\tgithub.com/google/uuid v1.7.0-rc.2', '\tgithub.com/google/uuid v1.7.0-rc.1'],
+    ['pyproject', '    "httpx >=0.28.1",', '    "httpx <0.29.0",'],
   ]) {
     assert.equal(isDependencyBump(was, is, format), false, `${format}: ${is}`);
   }
@@ -360,4 +362,10 @@ test('version comparison', () => {
   assert.equal(isDowngrade('>=2.10.1,<3.0.0', '>=2.9.0,<3.0.0'), true);
   assert.equal(isDowngrade('1.2', '1.2.0'), false);
   assert.equal(isDowngrade('latest', '1.0.0'), false);
+  assert.equal(isDowngrade('1.2.3-rc.2', '1.2.3-rc.1'), true);
+  assert.equal(isDowngrade('1.2.3-rc.9', '1.2.3-rc.10'), false);
+  assert.equal(isDowngrade('1.2.3', '1.2.3-rc.1'), true);
+  assert.equal(isDowngrade('1.2.3-rc.1', '1.2.3'), false);
+  assert.equal(isDowngrade('>=2.0.0rc2', '>=2.0.0rc1'), true);
+  assert.equal(isDowngrade('v0.0.0-20240101120000-abcdef123456', 'v0.0.0-20230101120000-fedcba654321'), true);
 });

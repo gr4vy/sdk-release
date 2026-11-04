@@ -198,6 +198,7 @@ const DEPENDENCY_LINES = {
   ],
 };
 const REGISTRY_VERSION = /^(?=.*\d)[\s<>=!~^*|,.\w+-]+$/;
+const operators = (version) => version.replace(/[\w.+-]+/g, '');
 
 export function isDependencyBump(was, is, format) {
   return (DEPENDENCY_LINES[format] ?? []).some((pattern) => {
@@ -205,19 +206,38 @@ export function isDependencyBump(was, is, format) {
     const after = is.match(pattern);
     if (!before || !after || after[2] === 'version') return false;
     return [1, 2, 3, 5].every((i) => before[i] === after[i]) && REGISTRY_VERSION.test(before[4]) && REGISTRY_VERSION.test(after[4])
-      && !isDowngrade(before[4], after[4]);
+      && operators(before[4]) === operators(after[4]) && !isDowngrade(before[4], after[4]);
   });
 }
 
 export function isDowngrade(was, is) {
-  const parts = (v) => String(v ?? '').match(/\d+(?:\.\d+)*/)?.[0].split('.').map(Number);
-  const a = parts(was);
-  const b = parts(is);
+  const parse = (v) => String(v ?? '').match(/(\d+(?:\.\d+)*)([0-9A-Za-z.-]*)/);
+  const a = parse(was);
+  const b = parse(is);
   if (!a || !b) return false;
+  const core = compareParts(a[1].split('.'), b[1].split('.'), '0');
+  if (core) return core > 0;
+  const pre = (m) => m[2].match(/\d+|[A-Za-z]+/g) ?? [];
+  const [x, y] = [pre(a), pre(b)];
+  if (!x.length || !y.length) return !x.length && y.length > 0;
+  return compareParts(x, y) > 0;
+}
+
+function compareParts(a, b, pad) {
   for (let i = 0; i < Math.max(a.length, b.length); i++) {
-    if ((a[i] ?? 0) !== (b[i] ?? 0)) return (b[i] ?? 0) < (a[i] ?? 0);
+    const x = a[i] ?? pad;
+    const y = b[i] ?? pad;
+    if (x === undefined || y === undefined) return x === undefined ? -1 : 1;
+    const [nx, ny] = [/^\d+$/.test(x), /^\d+$/.test(y)];
+    if (nx && ny) {
+      if (Number(x) !== Number(y)) return Number(x) < Number(y) ? -1 : 1;
+    } else if (nx !== ny) {
+      return nx ? -1 : 1;
+    } else if (x.toLowerCase() !== y.toLowerCase()) {
+      return x.toLowerCase() < y.toLowerCase() ? -1 : 1;
+    }
   }
-  return false;
+  return 0;
 }
 
 function isVersionLineBump(was, is, releaseVersion) {
