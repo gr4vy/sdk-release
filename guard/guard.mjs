@@ -204,8 +204,20 @@ export function isDependencyBump(was, is, format) {
     const before = was.match(pattern);
     const after = is.match(pattern);
     if (!before || !after || after[2] === 'version') return false;
-    return [1, 2, 3, 5].every((i) => before[i] === after[i]) && REGISTRY_VERSION.test(before[4]) && REGISTRY_VERSION.test(after[4]);
+    return [1, 2, 3, 5].every((i) => before[i] === after[i]) && REGISTRY_VERSION.test(before[4]) && REGISTRY_VERSION.test(after[4])
+      && !isDowngrade(before[4], after[4]);
   });
+}
+
+export function isDowngrade(was, is) {
+  const parts = (v) => String(v ?? '').match(/\d+(?:\.\d+)*/)?.[0].split('.').map(Number);
+  const a = parts(was);
+  const b = parts(is);
+  if (!a || !b) return false;
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
+    if ((a[i] ?? 0) !== (b[i] ?? 0)) return (b[i] ?? 0) < (a[i] ?? 0);
+  }
+  return false;
 }
 
 function isVersionLineBump(was, is, releaseVersion) {

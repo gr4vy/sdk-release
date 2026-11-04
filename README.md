@@ -15,7 +15,7 @@ A PR merges unattended only when all of these hold:
 - Every changed file is a generated path (`allowed`), and none is `blocked` or listed in the repo's `.genignore`. Blocked always wins.
 - `versionOnly` files change nothing except version numbers, and only to the new `releaseVersion`.
 - `manifests` (such as `package.json`) may change only `version`, to the new `releaseVersion`, and the version ranges of dependencies already listed. Adding or removing a dependency, or changing any other field such as `scripts`, goes to a human. Lockfiles are treated as generated output.
-- `dependencyFiles` (`pyproject.toml`, `build.gradle`, `go.mod`, `.csproj`) are checked line by line: a changed line must be the version line, moved to the new `releaseVersion`, or an existing dependency's line with only its version changed, to a plain registry version. A different package, a new line, a git/file/URL source or any other edit goes to a human.
+- `dependencyFiles` (`pyproject.toml`, `build.gradle`, `go.mod`, `.csproj`) are checked line by line: a changed line must be the version line, moved to the new `releaseVersion`, or an existing dependency's line with only its version changed, to a plain registry version. A lower version, a different package, a new line, a git/file/URL source or any other edit goes to a human. (Manifest ranges such as `package.json` are not checked for downgrades: they say what the SDK accepts, and Speakeasy widens them on purpose.)
 
 ### The CLI
 
