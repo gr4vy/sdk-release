@@ -20,7 +20,7 @@ export function evaluate({ pr, run, commits, files, config, genignore = [], mani
 
 export function evaluateRelease({ pr, run, commits, files, config, manifest, history }) {
   const release = config.releasePr;
-  const reasons = checkSource({ pr, run, commits, config, branchPrefix: release.branchPrefix });
+  const reasons = checkSource({ pr, run, commits, config, branchPrefix: release.branchPrefix, signedCommitters: release.signedCommitters ?? [] });
   const fail = (msg) => reasons.push(msg);
 
   if (files.length !== pr.changed_files) fail(`could only read ${files.length} of ${pr.changed_files} changed files`);
@@ -39,7 +39,7 @@ export function evaluateRelease({ pr, run, commits, files, config, manifest, his
   return { ok: reasons.length === 0, reasons };
 }
 
-function checkSource({ pr, run, commits, config, branchPrefix }) {
+function checkSource({ pr, run, commits, config, branchPrefix, signedCommitters = [] }) {
   const reasons = [];
   const fail = (msg) => reasons.push(msg);
 
@@ -59,7 +59,8 @@ function checkSource({ pr, run, commits, config, branchPrefix }) {
 
   if (commits.length !== pr.commits) fail(`could only read ${commits.length} of ${pr.commits} commits`);
   for (const c of commits) {
-    for (const who of [c.author?.login, c.committer?.login]) {
+    const signedByGitHub = signedCommitters.includes(c.committer?.login) && c.commit?.verification?.verified === true;
+    for (const who of signedByGitHub ? [c.author?.login] : [c.author?.login, c.committer?.login]) {
       if (!config.commitAuthors.includes(who)) {
         fail(`commit ${c.sha.slice(0, 7)} by ${who ?? 'an unknown account'}`);
         break;
