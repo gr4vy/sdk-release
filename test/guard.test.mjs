@@ -384,6 +384,8 @@ test('a version with text that is not a version goes to a human', () => {
     ['gradle', "    implementation 'com.auth0:java-jwt:4.5.0'", "    implementation 'com.auth0:java-jwt:5.+'"],
     ['gradle', "    implementation 'com.auth0:java-jwt:4.5.0'", "    implementation 'com.auth0:java-jwt:latest.release5'"],
     ['gradle', "    implementation 'com.auth0:java-jwt:foo4.5.0'", "    implementation 'com.auth0:java-jwt:foo5.0.0'"],
+    ['gradle', "    implementation 'com.auth0:java-jwt:foo_4.5.0'", "    implementation 'com.auth0:java-jwt:foo_5.0.0'"],
+    ['gradle', "    implementation 'com.auth0:java-jwt:4.5.0_foo'", "    implementation 'com.auth0:java-jwt:5.0.0_foo'"],
   ]) {
     assert.equal(isDependencyBump(was, is, format), false, `${format}: ${is}`);
   }
