@@ -302,7 +302,8 @@ test('cli: a release PR goes to a human when a person merged anything since the 
 
 test('cli: a release PR may only bump the version and add changelog entries', () => {
   const cases = [
-    [{ after: '{\n  ".": "1.48.0",\n  "x": "1"\n}\n' }, '.release-please-manifest.json: changes x, not one version'],
+    [{ after: '{\n  ".": "1.48.0",\n  "x": "1"\n}\n' }, '.release-please-manifest.json: changes x, not the "." version'],
+    [{ before: '{\n  ".": "1.48.0",\n  "other": "1.0.0"\n}\n', after: '{\n  ".": "1.48.0",\n  "other": "1.1.0"\n}\n' }, '.release-please-manifest.json: changes other, not the "." version'],
     [{ after: '{\n  ".": "1.47.0"\n}\n' }, '.release-please-manifest.json: 1.48.0 to 1.47.0 is not a version bump'],
     [{ after: '{\n  ".": "1.49.0-beta"\n}\n' }, '.release-please-manifest.json: 1.48.0 to 1.49.0-beta is not a version bump'],
   ];

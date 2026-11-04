@@ -10,7 +10,7 @@ function fakeGitHub({ main = HEAD, version = '2.4.38', manifestVersion, tagged =
   const routes = {
     [`/repos/${REPO}/commits/main`]: { sha: main },
     [`/repos/${REPO}/contents/.speakeasy/gen.lock?ref=${HEAD}`]: { content: Buffer.from(`management:\n  releaseVersion: ${version}\n`).toString('base64') },
-    [`/repos/${REPO}/contents/.release-please-manifest.json?ref=${HEAD}`]: { content: Buffer.from(JSON.stringify({ '.': manifestVersion ?? version })).toString('base64') },
+    [`/repos/${REPO}/contents/.release-please-manifest.json?ref=${HEAD}`]: { content: Buffer.from(manifestVersion === null ? '{not json' : JSON.stringify({ '.': manifestVersion ?? version })).toString('base64') },
     [`/repos/${REPO}/compare/${latest}...${HEAD}`]: { status, total_commits: commits.length, commits: commits.map(({ sha }) => ({ sha })) },
   };
   if (tagged) routes[`/repos/${REPO}/git/ref/tags/v${version}`] = {};
@@ -84,7 +84,7 @@ test('release-please: the version comes from .release-please-manifest.json', asy
 });
 
 test('a version that is not X.Y.Z never publishes', async () => {
-  for (const manifestVersion of ['1.50.0\nmode=auto', 'latest', '']) {
+  for (const manifestVersion of ['1.50.0\nmode=auto', '1.50.0-beta', 'latest', '', null]) {
     const { publish } = await decide(fakeGitHub({ manifestVersion }), { repo: REPO, headSha: HEAD, bot: BOT, versionSource: 'release-please' });
     assert.equal(publish, false, JSON.stringify(manifestVersion));
   }

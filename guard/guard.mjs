@@ -75,7 +75,7 @@ function checkReleaseManifest(f, manifest) {
   if (!before || !after) return 'could not read it as a JSON object';
   const keys = [...new Set([...Object.keys(before), ...Object.keys(after)])];
   const changed = keys.filter((k) => before[k] !== after[k]);
-  if (changed.length !== 1 || !(changed[0] in before) || !(changed[0] in after)) return `changes ${changed.join(', ') || 'nothing'}, not one version`;
+  if (changed.length !== 1 || changed[0] !== '.' || !('.' in before) || !('.' in after)) return `changes ${changed.join(', ') || 'nothing'}, not the "." version`;
   return isNewerVersion(before[changed[0]], after[changed[0]]) ? null : `${before[changed[0]]} to ${after[changed[0]]} is not a version bump`;
 }
 
